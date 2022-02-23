@@ -15,15 +15,4 @@ null_ls.setup({
     formatting.phpcbf,
     formatting.phpcsfixer,
 		formatting.prettier
-	},
-  on_attch = function (client)
-    if client.resolved_capabilities.document_formatting then
-        vim.cmd([[
-        augroup LspFormatting
-            autocmd! * <buffer>
-            autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()
-        augroup END
-        ]])
-    end
-  end,
-})
+	}})
