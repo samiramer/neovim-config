@@ -20,6 +20,7 @@ require "plugin-settings.toggleterm-nvim"
 require "plugin-settings.which-key"
 require "plugin-settings.nvim-dap"
 require "plugin-settings.dapinstall"
+require "plugin-settings.neogen"
 require "lsp"
 
 require "colorscheme"

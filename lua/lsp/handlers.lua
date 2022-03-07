@@ -82,12 +82,12 @@ local function lsp_keymaps(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting_seq_sync()' ]]
-  vim.cmd([[
-    augroup LspFormatting
-      autocmd! * <buffer>
-      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()
-    augroup END
-  ]])
+  -- vim.cmd([[
+  --   augroup LspFormatting
+  --     autocmd! * <buffer>
+  --     autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()
+  --   augroup END
+  -- ]])
 end
 
 M.on_attach = function(client, bufnr)

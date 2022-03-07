@@ -29,13 +29,17 @@ if not status_ok then
   return
 end
 
-return require"packer".startup(function(use)
+return packer.startup(function(use)
 
   use "wbthomason/packer.nvim"
   use "nvim-lua/plenary.nvim"
 
   use "ful1e5/onedark.nvim"
   use "morhetz/gruvbox"
+  use 'marko-cerovac/material.nvim'
+  use 'tjdevries/colorbuddy.vim'
+  use 'tjdevries/gruvbuddy.nvim'
+  use "lunarvim/darkplus.nvim"
 
   use "numToStr/Comment.nvim"
   use "akinsho/bufferline.nvim"
@@ -78,6 +82,9 @@ return require"packer".startup(function(use)
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
   use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
   use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+
+  -- Annotations (PHP doc, etc)
+  use "danymat/neogen"
 
   -- DAP
   use 'mfussenegger/nvim-dap'

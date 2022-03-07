@@ -171,6 +171,13 @@ local mappings = {
     C = { "<cmd>Telescope commands<cr>", "Commands" },
   },
 
+  n = {
+    name = "Neogen",
+    f = { "<cmd>Neogen func<cr>", "Annotate function" },
+    c = { "<cmd>Neogen class<cr>", "Annotate class" },
+    t = { "<cmd>Neogen type<cr>", "Annotate type" },
+    l = { "<cmd>Neogen file<cr>", "Annotate file" },
+  }
 }
 
 which_key.setup(setup)
