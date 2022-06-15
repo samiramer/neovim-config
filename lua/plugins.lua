@@ -16,13 +16,13 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]]
-
+-- vim.cmd [[
+--   augroup packer_user_config
+--     autocmd!
+--     autocmd BufWritePost plugins.lua source <afile> | PackerSync
+--   augroup end
+-- ]]
+--
 -- Use a protected call so we don"t error out on first use
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
@@ -40,6 +40,9 @@ return packer.startup(function(use)
   use 'tjdevries/colorbuddy.vim'
   use 'tjdevries/gruvbuddy.nvim'
   use "lunarvim/darkplus.nvim"
+  use 'arcticicestudio/nord-vim'
+  use 'EdenEast/nightfox.nvim'
+  use 'tpope/vim-fugitive'
 
   use "numToStr/Comment.nvim"
   use "akinsho/bufferline.nvim"
@@ -51,10 +54,11 @@ return packer.startup(function(use)
   use "goolord/alpha-nvim"
   use "moll/vim-bbye"
   use "antoinemadec/FixCursorHold.nvim"
-  use "ahmedkhalf/project.nvim"
   use "windwp/nvim-autopairs"
   use "folke/which-key.nvim"
   use "akinsho/toggleterm.nvim"
+  use "christoomey/vim-tmux-navigator"
+  use "karb94/neoscroll.nvim"
 
   use "nvim-treesitter/nvim-treesitter"
   use "JoosepAlviste/nvim-ts-context-commentstring"
@@ -82,11 +86,12 @@ return packer.startup(function(use)
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
   use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
   use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+  use "folke/trouble.nvim" -- pretty list for LSP diagnostics
 
   -- Annotations (PHP doc, etc)
   use "danymat/neogen"
 
   -- DAP
   use 'mfussenegger/nvim-dap'
-  use "Pocco81/DAPInstall.nvim"
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
 end)

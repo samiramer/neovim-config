@@ -21,6 +21,8 @@ require "plugin-settings.which-key"
 require "plugin-settings.nvim-dap"
 require "plugin-settings.dapinstall"
 require "plugin-settings.neogen"
+require "plugin-settings.neoscroll"
+require "plugin-settings.trouble"
 require "lsp"
 
 require "colorscheme"
