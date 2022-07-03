@@ -1,7 +1,14 @@
 vim.cmd [[
   set background=dark
-  let g:gruvbox_contrast_dark = 'hard'
-  let g:material_style = "darker"
-  " colorscheme gruvbox
-  colorscheme nightfox
+
+  " let g:material_style = "darker"
+  " colorscheme nightfox
+
+  " Set contrast.
+  " This configuration option should be placed before `colorscheme gruvbox-material`.
+  " Available values: 'hard', 'medium'(default), 'soft'
+  let g:gruvbox_material_background = 'hard'
+  " For better performance
+  let g:gruvbox_material_better_performance = 1
+  colorscheme gruvbox-material
 ]]

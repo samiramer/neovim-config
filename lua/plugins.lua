@@ -34,16 +34,10 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim"
   use "nvim-lua/plenary.nvim"
 
-  use "ful1e5/onedark.nvim"
-  use "morhetz/gruvbox"
-  use 'marko-cerovac/material.nvim'
-  use 'tjdevries/colorbuddy.vim'
-  use 'tjdevries/gruvbuddy.nvim'
-  use "lunarvim/darkplus.nvim"
-  use 'arcticicestudio/nord-vim'
+  use 'sainnhe/gruvbox-material'
   use 'EdenEast/nightfox.nvim'
-  use 'tpope/vim-fugitive'
 
+  use 'tpope/vim-fugitive'
   use "numToStr/Comment.nvim"
   use "akinsho/bufferline.nvim"
   use "lewis6991/gitsigns.nvim"
@@ -58,7 +52,6 @@ return packer.startup(function(use)
   use "folke/which-key.nvim"
   use "akinsho/toggleterm.nvim"
   use "christoomey/vim-tmux-navigator"
-  use "karb94/neoscroll.nvim"
 
   use "nvim-treesitter/nvim-treesitter"
   use "JoosepAlviste/nvim-ts-context-commentstring"
