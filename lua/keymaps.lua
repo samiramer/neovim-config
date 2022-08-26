@@ -65,3 +65,6 @@ keymap("n", "<leader>-", ":split<CR>", opts)
 
 keymap("n", "<Tab>", ":bnext<CR>", opts)
 keymap("n", "<S-Tab>", ":bprev<CR>", opts)
+
+-- Toggle the status bar ON/OFF
+keymap("n", "<leader>m", ":call ToggleStatusBar()<CR>", opts)

@@ -45,3 +45,23 @@ vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd [[set iskeyword+=-]]
 vim.cmd [[set formatoptions-=cro]] -- TODO: this doesn't seem to work 
 vim.cmd [[autocmd Filetype php setl expandtab tabstop=4 softtabstop=4 shiftwidth=4]]
+
+-- This function will toggle the status bar and everything else at the bottom ON/OFF
+vim.cmd [[
+  let s:hidden_all = 0
+  function! ToggleStatusBar()
+      if s:hidden_all  == 0
+          let s:hidden_all = 1
+          set noshowmode
+          set noruler
+          set laststatus=0
+          set noshowcmd
+      else
+          let s:hidden_all = 0
+          set showmode
+          set ruler
+          set laststatus=3
+          set showcmd
+      endif
+  endfunction
+]]

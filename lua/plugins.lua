@@ -36,7 +36,7 @@ return packer.startup(function(use)
 
   use 'sainnhe/gruvbox-material'
   use 'EdenEast/nightfox.nvim'
-
+  use 'michaeldyrynda/carbon'
   use 'tpope/vim-fugitive'
   use "numToStr/Comment.nvim"
   use "akinsho/bufferline.nvim"
