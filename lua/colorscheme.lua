@@ -2,7 +2,8 @@ vim.cmd [[
   set background=dark
 
   let g:material_style = "default"
-  colorscheme terafox
+  " colorscheme terafox
+  colorscheme carbon
 
   " Set contrast.
   " This configuration option should be placed before `colorscheme gruvbox-material`.
