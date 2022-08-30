@@ -11,7 +11,8 @@ vim.cmd [[
 
   " colorscheme gruvbox-material
   " colorscheme terafox
+  colorscheme nightfox
   " colorscheme nord
-  colorscheme carbon
+  " colorscheme carbon
 
 ]]
