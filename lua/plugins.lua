@@ -34,6 +34,8 @@ return packer.startup(function(use)
   use "wbthomason/packer.nvim"
   use "nvim-lua/plenary.nvim"
 
+  use 'qbbr/vim-twig'
+  use 'norcalli/nvim-colorizer.lua'
   use 'sainnhe/gruvbox-material'
   use 'EdenEast/nightfox.nvim'
   use 'michaeldyrynda/carbon'
@@ -86,5 +88,5 @@ return packer.startup(function(use)
 
   -- DAP
   use 'mfussenegger/nvim-dap'
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
 end)
