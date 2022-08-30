@@ -41,7 +41,6 @@ return packer.startup(function(use)
   use 'michaeldyrynda/carbon'
   use 'tpope/vim-fugitive'
   use "numToStr/Comment.nvim"
-  use "akinsho/bufferline.nvim"
   use "lewis6991/gitsigns.nvim"
   use "kyazdani42/nvim-web-devicons"
   use "kyazdani42/nvim-tree.lua"
@@ -54,6 +53,11 @@ return packer.startup(function(use)
   use "folke/which-key.nvim"
   use "akinsho/toggleterm.nvim"
   use "christoomey/vim-tmux-navigator"
+
+  use {
+    'romgrk/barbar.nvim',
+    requires = {'kyazdani42/nvim-web-devicons'}
+  }
 
   use "nvim-treesitter/nvim-treesitter"
   use "JoosepAlviste/nvim-ts-context-commentstring"
