@@ -23,6 +23,7 @@ require "plugin-settings.dapinstall"
 require "plugin-settings.neogen"
 require "plugin-settings.neoscroll"
 require "plugin-settings.trouble"
+require "plugin-settings.nvim-colorizer"
 require "lsp"
 
 require "colorscheme"
