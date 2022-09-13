@@ -81,8 +81,7 @@ local opts = {
 local mappings = {
   ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
   ["b"] = {
-    "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown())<cr>",
-    "Buffers",
+    "<cmd>Telescope buffers theme=ivy<cr>", "Buffers",
   },
   ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
   ["w"] = { "<cmd>w!<CR>", "Save" },
@@ -90,11 +89,9 @@ local mappings = {
   ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
   ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   ["f"] = {
-    "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown())<cr>",
-    "Find files",
+    "<cmd>Telescope find_files theme=ivy<cr>", "Find files",
   },
   ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
   ["t"] = { "<cmd>TroubleToggle<cr>", "Trouble" },
 
   p = {
@@ -120,9 +117,9 @@ local mappings = {
       "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
       "Undo Stage Hunk",
     },
-    o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
-    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+    o = { "<cmd>Telescope git_status theme=ivy<cr>", "Open changed file" },
+    b = { "<cmd>Telescope git_branches theme=ivy<cr>", "Checkout branch" },
+    c = { "<cmd>Telescope git_commits theme=ivy<cr>", "Checkout commit" },
     d = {
       "<cmd>Gitsigns diffthis HEAD<cr>",
       "Diff",
@@ -132,9 +129,9 @@ local mappings = {
 
   d = {
     name = "Debug",
-    b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint"},
-    c = { "<cmd>lua require'dap'.continue()<cr>", "Continue"},
-    u = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle DAP UI"},
+    b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+    c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
+    u = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle DAP UI" },
   },
 
   l = {
@@ -162,22 +159,22 @@ local mappings = {
     l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
     q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
     r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+    s = { "<cmd>Telescope lsp_document_symbols theme=ivy<cr>", "Document Symbols" },
     S = {
-      "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+      "<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy<cr>",
       "Workspace Symbols",
     },
   },
   s = {
     name = "Search",
-    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-    h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-    M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-    R = { "<cmd>Telescope registers<cr>", "Registers" },
-    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-    C = { "<cmd>Telescope commands<cr>", "Commands" },
+    b = { "<cmd>Telescope git_branches theme=ivy<cr>", "Checkout branch" },
+    c = { "<cmd>Telescope colorscheme theme=ivy<cr>", "Colorscheme" },
+    h = { "<cmd>Telescope help_tags theme=ivy<cr>", "Find Help" },
+    M = { "<cmd>Telescope man_pages theme=ivy<cr>", "Man Pages" },
+    r = { "<cmd>Telescope oldfiles theme=ivy<cr>", "Open Recent File" },
+    R = { "<cmd>Telescope registers theme=ivy<cr>", "Registers" },
+    k = { "<cmd>Telescope keymaps theme=ivy<cr>", "Keymaps" },
+    C = { "<cmd>Telescope commands theme=ivy<cr>", "Commands" },
   },
 
   n = {

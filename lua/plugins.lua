@@ -37,6 +37,7 @@ return packer.startup(function(use)
   use 'qbbr/vim-twig'
   use 'norcalli/nvim-colorizer.lua'
   use 'sainnhe/gruvbox-material'
+  use 'ellisonleao/gruvbox.nvim'
   use 'EdenEast/nightfox.nvim'
   use 'michaeldyrynda/carbon'
   use 'tpope/vim-fugitive'
@@ -54,6 +55,7 @@ return packer.startup(function(use)
   use "akinsho/toggleterm.nvim"
   use "christoomey/vim-tmux-navigator"
 
+  use "akinsho/bufferline.nvim"
   use {
     'romgrk/barbar.nvim',
     requires = {'kyazdani42/nvim-web-devicons'}
@@ -63,10 +65,7 @@ return packer.startup(function(use)
   use "JoosepAlviste/nvim-ts-context-commentstring"
 
   use "nvim-telescope/telescope.nvim"
-  use {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    run = "make"
-  }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
   -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
