@@ -26,6 +26,7 @@ require "plugin-settings.neogen"
 require "plugin-settings.neoscroll"
 require "plugin-settings.trouble"
 require "plugin-settings.nvim-colorizer"
+require "plugin-settings.catpuccin"
 require "lsp"
 
 require "colorscheme"

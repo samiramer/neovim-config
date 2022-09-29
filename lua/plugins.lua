@@ -39,6 +39,7 @@ return packer.startup(function(use)
   use 'sainnhe/gruvbox-material'
   use 'ellisonleao/gruvbox.nvim'
   use 'EdenEast/nightfox.nvim'
+  use { "catppuccin/nvim", as = "catppuccin" }
   use 'michaeldyrynda/carbon'
   use 'tpope/vim-fugitive'
   use "numToStr/Comment.nvim"
