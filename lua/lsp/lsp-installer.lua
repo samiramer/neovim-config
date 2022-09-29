@@ -26,3 +26,4 @@ lsp_config.intelephense.setup(vim.tbl_deep_extend("force", intelephense_opts, op
 
 lsp_config.tsserver.setup(opts)
 lsp_config.cssls.setup(opts)
+lsp_config.volar.setup(opts)
