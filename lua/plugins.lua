@@ -93,4 +93,5 @@ return packer.startup(function(use)
   -- DAP
   use 'mfussenegger/nvim-dap'
   use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+  use { "rcarriga/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } }
 end)
