@@ -71,4 +71,21 @@ return packer.startup(function(use)
     "sindrets/diffview.nvim",
     requires = "nvim-lua/plenary.nvim"
   }
+
+  use {
+    "williamboman/mason-lspconfig.nvim",
+    requires = {
+      "williamboman/mason.nvim",
+      "neovim/nvim-lspconfig"
+    }
+  }
+
+  use {
+    "samiramer/mason-null-ls.nvim",
+    requires = {
+      "williamboman/mason.nvim",
+      "jose-elias-alvarez/null-ls.nvim"
+    }
+  }
+
 end)

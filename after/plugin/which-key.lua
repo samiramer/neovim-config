@@ -52,11 +52,35 @@ wk.register({
 
   h = { ":nohlsearch<cr>", "Toggle highlight search" },
 
-  t = {
-    name = "Tab",
-    c = { ":tabclose<cr>", "Close current tab" },
-    n = { ":tabnext<cr>", "Tab next" },
-    p = { ":tabprev<cr>", "Tab previous" },
+  l = {
+    name = "LSP",
+    a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+    d = {
+      "<cmd>Telescope lsp_document_diagnostics<cr>",
+      "Document Diagnostics",
+    },
+    f = { "<cmd>lua vim.lsp.buf.format({ async = false })<cr>", "Format" },
+    w = {
+      "<cmd>Telescope lsp_workspace_diagnostics<cr>",
+      "Workspace Diagnostics",
+    },
+    i = { "<cmd>LspInfo<cr>", "Info" },
+    I = { "<cmd>Mason<cr>", "Mason" },
+    j = {
+      "<cmd>lua vim.diagnostic.goto_next()<CR>",
+      "Next Diagnostic",
+    },
+    k = {
+      "<cmd>lua vim.diagnostic.goto_prev()<cr>",
+      "Prev Diagnostic",
+    },
+    q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
+    r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+    S = {
+      "<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy<cr>",
+      "Workspace Symbols",
+    },
   },
 
 }, { prefix = "<leader>" })
