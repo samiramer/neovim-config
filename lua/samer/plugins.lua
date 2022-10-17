@@ -28,6 +28,7 @@ return packer.startup(function(use)
   use { "nvim-tree/nvim-web-devicons" }
   use { "tpope/vim-surround" }
   use { "tpope/vim-repeat" }
+  use { "tpope/vim-fugitive" }
   use { "catppuccin/nvim", as = "catppuccin" }
   use { "christoomey/vim-tmux-navigator" }
   use { "folke/which-key.nvim" }
@@ -54,4 +55,20 @@ return packer.startup(function(use)
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   }
 
+
+  -- some git plugins
+  use {
+    'lewis6991/gitsigns.nvim',
+    tag = 'release'
+  }
+
+  use {
+    "TimUntersberger/neogit",
+    requires = "nvim-lua/plenary.nvim"
+  }
+
+  use {
+    "sindrets/diffview.nvim",
+    requires = "nvim-lua/plenary.nvim"
+  }
 end)

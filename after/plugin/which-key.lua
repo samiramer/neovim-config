@@ -9,10 +9,11 @@ wk.register({
   ["="] = { ":vsplit<cr>", "Split Vertically" },
 
   c = { ":bdelete!<cr>", "Close current buffer" },
+
   e = { ":NvimTreeToggle<cr>", "Open Explorer" },
 
   f = {
-    name = "find",
+    name = "Find",
     b = { "<cmd>Telescope buffers<cr>", "Open buffers" },
     g = { "<cmd>Telescope live_grep<cr>", "Find in files" },
     f = { "<cmd>Telescope find_files<cr>", "Find File" },
@@ -20,5 +21,42 @@ wk.register({
     w = { "<cmd>Telescope grep_string<cr>", "Find word in files" },
   },
 
+  g = {
+    name = "Git",
+    g = { "<cmd>lua require('neogit').open()<cr>", "Neogit" },
+    j = { "<cmd>lua require('gitsigns').next_hunk()<cr>", "Next Hunk" },
+    k = { "<cmd>lua require('gitsigns').prev_hunk()<cr>", "Prev Hunk" },
+    l = { "<cmd>lua require('gitsigns').toggle_current_line_blame()<cr>", "Blame" },
+    p = { "<cmd>lua require('gitsigns').preview_hunk()<cr>", "Preview Hunk" },
+    r = { "<cmd>lua require('gitsigns').reset_hunk()<cr>", "Reset Hunk" },
+    R = { "<cmd>lua require('gitsigns').reset_buffer()<cr>", "Reset Buffer" },
+    s = { "<cmd>lua require('gitsigns').stage_hunk()<cr>", "Stage Hunk" },
+    u = {
+      "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>",
+      "Undo Stage Hunk",
+    },
+    o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+    c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+    d = {
+      "<cmd>lua require('gitsigns').diffthis()<cr>",
+      "Diff",
+    },
+    D = {
+      "<cmd>:DiffviewOpen<cr>",
+      "Diff",
+    },
+    h = { "<cmd>DiffviewFileHistory %<cr>", "Git file history" },
+    H = { "<cmd>DiffviewFileHistory<cr>", "Git branch file history" },
+  },
+
   h = { ":nohlsearch<cr>", "Toggle highlight search" },
+
+  t = {
+    name = "Tab",
+    c = { ":tabclose<cr>", "Close current tab" },
+    n = { ":tabnext<cr>", "Tab next" },
+    p = { ":tabprev<cr>", "Tab previous" },
+  },
+
 }, { prefix = "<leader>" })
