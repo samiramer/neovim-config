@@ -26,10 +26,12 @@ return packer.startup(function(use)
 
   use { "nvim-tree/nvim-tree.lua" }
   use { "nvim-tree/nvim-web-devicons" }
+
   use { "tpope/vim-surround" }
   use { "tpope/vim-repeat" }
   use { "tpope/vim-fugitive" }
   use { "tpope/vim-unimpaired" }
+
   use { "catppuccin/nvim", as = "catppuccin" }
   use { "christoomey/vim-tmux-navigator" }
   use { "folke/which-key.nvim" }
@@ -47,12 +49,12 @@ return packer.startup(function(use)
 
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.x',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
   use {
-    'nvim-telescope/telescope-fzf-native.nvim', 
-    requires = { {'nvim-telescope/telescope.nvim'} },
+    'nvim-telescope/telescope-fzf-native.nvim',
+    requires = { { 'nvim-telescope/telescope.nvim' } },
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   }
 

@@ -5,17 +5,17 @@ M.setup_clients = function()
   local status_lsp, lspconfig = pcall(require, "lspconfig")
   if not status_lsp then return end
 
-  local handlers = require('samer.lsp.handlers')
+  local handlers = require "samer.lsp.handlers"
 
   local opts = {
     on_attach = handlers.on_attach,
     capabilities = handlers.capabilities,
   }
 
-  local sumneko_opts = require("samer.lsp.clients.sumneko_lua")
+  local sumneko_opts = require "samer.lsp.clients.sumneko_lua"
   lspconfig.sumneko_lua.setup(vim.tbl_deep_extend("force", sumneko_opts, opts))
 
-  local intelephense_opts = require("samer.lsp.clients.intelephense")
+  local intelephense_opts = require "samer.lsp.clients.intelephense"
   lspconfig.intelephense.setup(vim.tbl_deep_extend("force", intelephense_opts, opts))
 
   lspconfig.jsonls.setup(opts)
@@ -42,7 +42,8 @@ M.setup_formatters = function()
       formatting.phpcbf,
       formatting.phpcsfixer,
       formatting.prettier
-    }})
+    }
+  })
 end
 
 return M

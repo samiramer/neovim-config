@@ -1,4 +1,4 @@
-local helpers = require('samer.helpers')
+local helpers = require 'samer.helpers'
 
 -- Default keymap options
 local opts = { noremap = true, silent = true }
