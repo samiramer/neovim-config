@@ -8,7 +8,13 @@ wk.register({
   ["-"] = { ":split<cr>", "Split Horizontally" },
   ["="] = { ":vsplit<cr>", "Split Vertically" },
 
-  c = { ":bdelete!<cr>", "Close current buffer" },
+  c = {
+    name = "Close",
+    c = { ":bdelete!<cr>", "Close buffer" },
+    l = { ":lclose<cr>", "Close list" },
+    q = { ":cclose<cr>", "Close quickfix list" },
+    t = { ":tabclose<cr>", "Close current tab" },
+  },
 
   e = { ":NvimTreeToggle<cr>", "Open Explorer" },
 
