@@ -26,3 +26,6 @@ helpers.nnoremap("<C-Right>", ":vertical resize +2<CR>", opts)
 -- Stay in indent mode
 helpers.vnoremap("<", "<gv", opts)
 helpers.vnoremap(">", ">gv", opts)
+
+helpers.nnoremap("[t", ":tabnext<CR>", opts)
+helpers.nnoremap("]t", ":tabprev<CR>", opts)
