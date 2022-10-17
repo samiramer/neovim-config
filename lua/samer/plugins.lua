@@ -29,6 +29,7 @@ return packer.startup(function(use)
   use { "tpope/vim-surround" }
   use { "tpope/vim-repeat" }
   use { "tpope/vim-fugitive" }
+  use { "tpope/vim-unimpaired" }
   use { "catppuccin/nvim", as = "catppuccin" }
   use { "christoomey/vim-tmux-navigator" }
   use { "folke/which-key.nvim" }
