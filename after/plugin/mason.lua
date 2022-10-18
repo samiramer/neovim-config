@@ -21,7 +21,6 @@ end
 local status_null, _ = pcall(require, "null-ls")
 local status_mnull, mnull = pcall(require, "mason-null-ls")
 
-print(status_mason)
 if (status_mason and status_null and status_mnull) then
   mnull.setup({
     ensure_installed = {
