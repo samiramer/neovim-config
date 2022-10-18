@@ -91,6 +91,12 @@ return packer.startup(function(use)
     }
   }
 
+  use {
+    "glepnir/lspsaga.nvim",
+    branch = "main",
+    requires = "neovim/nvim-lspconfig"
+  }
+
   use { "hrsh7th/nvim-cmp" }
   use {
     "hrsh7th/cmp-nvim-lsp",

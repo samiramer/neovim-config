@@ -60,8 +60,12 @@ wk.register({
 
   l = {
     name = "LSP",
-    a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+    a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
     d = {
+      "<cmd>Lspsaga peek_definition<cr>",
+      "Peek definition",
+    },
+    D = {
       "<cmd>Telescope lsp_document_diagnostics<cr>",
       "Document Diagnostics",
     },
@@ -73,15 +77,16 @@ wk.register({
     i = { "<cmd>LspInfo<cr>", "Info" },
     I = { "<cmd>Mason<cr>", "Mason" },
     j = {
-      "<cmd>lua vim.diagnostic.goto_next()<CR>",
+      "<cmd>Lspsaga diagnostic_jump_next<CR>",
       "Next Diagnostic",
     },
     k = {
-      "<cmd>lua vim.diagnostic.goto_prev()<cr>",
+      "<cmd>Lspsaga diagnostic_jump_prev<CR>",
       "Prev Diagnostic",
     },
+    l = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Line diagnostics" },
     q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
-    r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+    r = { "<cmd>Lspsaga rename<cr>", "Rename" },
     s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
     S = {
       "<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy<cr>",
