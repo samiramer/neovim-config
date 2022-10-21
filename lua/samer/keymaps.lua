@@ -29,3 +29,6 @@ helpers.vnoremap(">", ">gv", opts)
 
 helpers.nnoremap("[t", ":tabnext<CR>", opts)
 helpers.nnoremap("]t", ":tabprev<CR>", opts)
+
+helpers.vnoremap("<leader>y", ":OSCYank<CR>", opts)
+helpers.nnoremap("<leader>y", "<Plug>OSCYank", opts)
