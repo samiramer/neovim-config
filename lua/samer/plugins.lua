@@ -35,6 +35,10 @@ return packer.startup(function(use)
     use { "christoomey/vim-tmux-navigator" }
     use { "folke/which-key.nvim" }
     use { "numToStr/Comment.nvim" }
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    }
 
 
     -- syntax stuff

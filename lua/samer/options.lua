@@ -11,12 +11,14 @@ vim.opt.signcolumn = "yes"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.termguicolors = true
 vim.opt.timeoutlen = 500
 vim.opt.undofile = true
 vim.opt.wrap = false
+vim.opt.showmode = false
 
 -- Highlight on yank
 local yankGrp = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -26,6 +28,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Adjust tab spacing for certian file types
-vim.api.nvim_create_autocmd("Filetype php,lua", {
+vim.api.nvim_create_autocmd("Filetype", {
+    pattern = { "php", "lua" },
     command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab"
 })
+
+-- local statusGrp = vim.api.nvim_create_augroup("StatusLineUpdate", { clear = true })
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     command = "lua vim.opt.statusline = require('samer.helpers').status_line()",
+--     group = statusGrp,
+-- })
+
+-- vim.opt.statusline = require 'samer.helpers'.status_line()
