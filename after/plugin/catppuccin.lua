@@ -16,5 +16,10 @@ c.setup {
             warnings = { "underline" },
             information = { "underline" },
         },
+        styles = {
+            comments = { "italic" },
+            functions = { "italic", "normal" },
+            keywords = { "italic" },
+        },
     },
 }
