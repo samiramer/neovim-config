@@ -18,15 +18,33 @@ M.xnoremap = bind("x")
 M.inoremap = bind("i")
 
 M.status_line = function()
-    local mode = "%-5{%v:lua.string.upper(v:lua.vim.fn.mode())%}"
-    local file_name = "%f"
+    -- use catppuccin colors if possible
+    local catppuccin_ok, _ = pcall(require, 'catppuccin')
+    if (catppuccin_ok) then
+        vim.api.nvim_create_autocmd("ColorScheme", {
+            pattern = "*",
+            callback = function()
+                local colors = require 'catppuccin.palettes'.get_palette()
+                -- do something with colors
+                vim.api.nvim_set_hl(0, 'StatusLine', { fg = colors.text, bg = colors.base })
+                vim.api.nvim_set_hl(0, 'StatusLineNC', { fg = colors.text, bold = true })
+            end
+        })
+    end
+
+    local mode = "[%.2{%v:lua.string.upper(v:lua.vim.fn.mode())%}]"
+    local file_name = "%1*[%f]"
     local buf_nr = "[%n]"
     local modified = " %-m"
     local right_align = "%="
-    local gitsigns = "%{get(b:,'gitsigns_status','')} "
-    local git = "%{get(b:, 'gitsigns_head', '')} "
     local file_type = "%y "
-    local line_no = "%10([%l,%v/%L%)]"
+    local line_no = "%10([%l:%v-%L%)]"
+
+    local gitsigns = "%{get(b:,'gitsigns_status','')}"
+    gitsigns = "[" .. gitsigns .. "]"
+
+    local git = "%{get(b:, 'gitsigns_head', '')}"
+    git = "[" .. git .. "]"
 
     return string.format(
         "%s%s%s%s%s%s%s%s%s",
