@@ -19,6 +19,10 @@ vim.opt.timeoutlen = 500
 vim.opt.undofile = true
 vim.opt.wrap = false
 vim.opt.showmode = false
+vim.opt.backup = false
+vim.opt.swapfile = false
+vim.opt.writebackup = false
+vim.opt.showcmd = false
 
 -- Highlight on yank
 local yankGrp = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -38,5 +42,5 @@ vim.api.nvim_create_autocmd("Filetype", {
 --     command = "lua vim.opt.statusline = require('samer.helpers').status_line()",
 --     group = statusGrp,
 -- })
-
+--
 -- vim.opt.statusline = require 'samer.helpers'.status_line()
