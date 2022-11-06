@@ -210,12 +210,12 @@ ins_right { 'location' }
 
 ins_right { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
-ins_right {
-    'o:encoding', -- option component same as &encoding in viml
-    fmt = string.upper, -- I'm not sure why it's upper case either ;)
-    cond = conditions.hide_in_width,
-    color = { fg = colors.green, gui = 'bold' },
-}
+-- ins_right {
+--     'o:encoding', -- option component same as &encoding in viml
+--     fmt = string.upper, -- I'm not sure why it's upper case either ;)
+--     cond = conditions.hide_in_width,
+--     color = { fg = colors.green, gui = 'bold' },
+-- }
 
 -- ins_right {
 --     'fileformat',
