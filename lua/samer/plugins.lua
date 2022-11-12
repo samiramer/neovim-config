@@ -40,6 +40,17 @@ return packer.startup(function(use)
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
 
+    -- vimwiki
+    use {
+        "vimwiki/vimwiki",
+        config = function()
+            vim.cmd [[
+                let g:vimwiki_list = [{'path': '~/Notes/', 'syntax': 'markdown', 'ext': '.md'}]
+                let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+                let g:vimwiki_markdown_link_ext = 1
+            ]]
+        end
+    }
 
     -- syntax stuff
     use {
