@@ -40,7 +40,7 @@ M.setup_formatters = function()
     sources = {
       formatting.eslint_d,
       formatting.phpcbf,
-      formatting.phpcsfixer,
+      formatting.phpcsfixer.with({ env = { PHP_CS_FIXER_IGNORE_ENV = 'True' } }),
       formatting.prettier
     }
   })
