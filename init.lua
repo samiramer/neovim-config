@@ -465,7 +465,7 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-require('mini.pairs').setup() -- auto pairs
+require('mini.pairs').setup({}) -- auto pairs
 require('mini.comment').setup { -- commenting
   hooks = {
     pre = function()
@@ -474,11 +474,8 @@ require('mini.comment').setup { -- commenting
   },
 }
 
--- Enable Comment.nvim
--- require('Comment').setup()
--- require('Comment').setup {
---   pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
--- }
+-- Phpactor keymaps for my new favorite plugin!!!!
+vim.keymap.set('n', '<leader>pm', ':PhpactorContextMenu<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>lk', vim.diagnostic.goto_prev)
