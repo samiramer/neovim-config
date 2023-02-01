@@ -29,6 +29,9 @@ require('packer').startup(function(use)
     run = 'composer install --no-dev -o'
   }
 
+  use 'AndrewRadev/splitjoin.vim' -- Splits single-line into multi-line, vice-versa
+  use 'famiu/bufdelete.nvim' -- Deletes buffers without messing up layouts
+
   -- Display buffers as tabs.
   use({
     'akinsho/bufferline.nvim',
@@ -223,7 +226,7 @@ vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', { silent = true })
 vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { silent = true })
 
 -- Close shortcuts
-vim.keymap.set('n', '<leader>cc', ':q<CR>', { silent = true })
+vim.keymap.set('n', '<leader>cc', ':Bdelete<CR>', { silent = true })
 vim.keymap.set('n', '<leader>cq', ':cclose<CR>', { silent = true })
 vim.keymap.set('n', '<leader>ct', ':tabclose<CR>', { silent = true })
 
