@@ -489,7 +489,7 @@ vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist)
 -- LSP settings.
 
 -- Enable debug mode
-vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level("debug")
 
 -- This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -526,7 +526,6 @@ local on_attach = function(_, bufnr)
   map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation')
   map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation', 'i')
 
-
   -- Lesser used LSP functionality
   map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   map('<leader>lwa', vim.lsp.buf.add_workspace_folder, '[L]SP [W]orkspace [A]dd Folder')
@@ -554,13 +553,10 @@ end
 local servers = {
   cssls = {},
   tsserver = {},
-  -- intelephense = {
-  --   format = {
-  --     enable = false
-  --   }
-  -- },
-  phpactor = {
-    ["language_server.diagnostic_sleep_time"] = 0
+  intelephense = {
+    format = {
+      enable = false
+    }
   },
   tailwindcss = {},
   jsonls = {
@@ -625,8 +621,8 @@ require('null-ls').setup {
         return utils.root_has_file({ '.eslintrc.js' })
       end,
     }),
-    -- require('null-ls').builtins.formatting.phpcbf,
-    -- require('null-ls').builtins.formatting.phpcsfixer.with({ env = { PHP_CS_FIXER_IGNORE_ENV = 'True' } }),
+    require('null-ls').builtins.formatting.phpcbf,
+    require('null-ls').builtins.formatting.phpcsfixer.with({ env = { PHP_CS_FIXER_IGNORE_ENV = 'True' } }),
     require('null-ls').builtins.formatting.prettierd,
   }
 }
