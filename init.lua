@@ -96,6 +96,12 @@ require('packer').startup(function(use)
     },
   }
 
+  use { -- Fantastic LSP UI plugin
+    'glepnir/lspsaga.nvim',
+    branch = 'main',
+    requires = 'kyazdani42/nvim-web-devicons'
+  }
+
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
     requires = {
@@ -111,6 +117,7 @@ require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
+
 
 -- When we are bootstrapping a configuration, it doesn't
 -- make sense to execute the rest of the init.lua.
@@ -207,8 +214,8 @@ vim.keymap.set({ 'v' }, '<', '<gv', { silent = true })
 vim.keymap.set({ 'v' }, '>', '>gv', { silent = true })
 
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+-- vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+-- vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- -- Easier window switching - I TURNED THIS OFF BECAUSE I USE vim-tmux-navigator
 -- vim.keymap.set('n', '<C-h>', "<C-w>h", {noremap = true, silent = true })
@@ -473,7 +480,7 @@ require('mini.pairs').setup({}) -- auto pairs
 require('mini.comment').setup { -- commenting
   hooks = {
     pre = function()
-      require('ts_context_commentstring.internal').update_commentstring()
+      require('ts_context_commentstring.internal').update_commentstring({})
     end,
   },
 }
@@ -482,9 +489,9 @@ require('mini.comment').setup { -- commenting
 vim.keymap.set('n', '<leader>pm', ':PhpactorContextMenu<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>lk', vim.diagnostic.goto_prev)
-vim.keymap.set('n', '<leader>lj', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>lk', ':Lspsaga diagnostic_jump_next<CR>')
+vim.keymap.set('n', '<leader>lj', ':Lspsaga diagnostic_jump_prev<CR>')
+vim.keymap.set('n', '<leader>le', ':Lspsaga show_line_diagnostics<CR>')
 vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist)
 
 -- LSP settings.
@@ -513,17 +520,21 @@ local on_attach = function(_, bufnr)
   end
 
   map('<leader>lr', vim.lsp.buf.rename, '[L]SP [R]ename')
-  map('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction')
+  map('<leader>la', ':Lspsaga code_action<CR>', '[L]SP Code [A]ction')
 
-  map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  map('gd', ':Lspsaga goto_definition<CR>', '[G]oto [D]efinition')
   map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   map('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+
+  map('<leader>ld', ':Lspsaga peek_definition<CR>', '[L]SP Peek [D]efinition')
   map('<leader>lD', vim.lsp.buf.type_definition, '[L]SP Type [D]efinition')
   map('<leader>lds', require('telescope.builtin').lsp_document_symbols, '[L]SP [D]ocument [S]ymbols')
   map('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[L]SP [W]orkspace [S]ymbols')
+  map('<leader>lo', ':Lspsaga outline<CR>', '[L]SP Document [O]utline')
+  map('<leader>lr', ':Lspsaga lsp_finder<CR>', '[L]SP Find All [R]eferences')
 
   -- See `:help K` for why this keymap
-  map('K', vim.lsp.buf.hover, 'Hover Documentation')
+  map('K', ':Lspsaga hover_doc<CR>', 'Hover Documentation')
   map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation')
   map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation', 'i')
 
@@ -629,6 +640,13 @@ require('null-ls').setup {
 }
 
 require('mason-null-ls').setup({ automatic_installation = true })
+
+require("lspsaga").setup({
+  request_timeout = 5000,
+  symbol_in_winbar = {
+    enable = false,
+  }
+})
 
 -- Turn on lsp status information
 require('fidget').setup({
