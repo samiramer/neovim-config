@@ -96,6 +96,22 @@ require('packer').startup(function(use)
     },
   }
 
+  use {
+    'jay-babu/mason-nvim-dap.nvim',
+    requires = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+      'williamboman/mason.nvim',
+      'mxsdev/nvim-dap-vscode-js',
+      {
+        "microsoft/vscode-js-debug",
+        opt = true,
+        tag = 'v1.75.1',
+        run = "npm install --legacy-peer-deps && npm run compile"
+      }
+    }
+  }
+
   use { -- Fantastic LSP UI plugin
     'glepnir/lspsaga.nvim',
     branch = 'main',
@@ -109,6 +125,7 @@ require('packer').startup(function(use)
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
       'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-omni',
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip'
     },
@@ -145,6 +162,9 @@ vim.api.nvim_create_autocmd("Filetype", {
   pattern = { "php", "lua" },
   command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab"
 })
+
+-- Cursorline
+vim.o.cursorline = true
 
 -- Global statusline
 vim.o.laststatus = 3
@@ -570,7 +590,7 @@ local servers = {
       enable = false
     }
   },
-  tailwindcss = {},
+  -- tailwindcss = {},
   jsonls = {
     json = {
       schemas = require('schemastore').json.schemas(),
@@ -581,7 +601,7 @@ local servers = {
     -- This drastically improves the responsiveness of diagnostic updates on change
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
   },
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
@@ -627,7 +647,7 @@ require('null-ls').setup {
         return utils.root_has_file({ '.eslintrc.js' })
       end,
     }),
-    require('null-ls').builtins.diagnostics.trail_space.with({ disabled_filetypes = { 'NvimTree' } }),
+    require('null-ls').builtins.diagnostics.trail_space.with({ disabled_filetypes = { 'NvimTree', 'text', 'log' } }),
     require('null-ls').builtins.formatting.eslint_d.with({
       condition = function(utils)
         return utils.root_has_file({ '.eslintrc.js' })
@@ -640,6 +660,123 @@ require('null-ls').setup {
 }
 
 require('mason-null-ls').setup({ automatic_installation = true })
+
+-- Enable debug adapters like xdebug (PHP), etc.
+require('mason-nvim-dap').setup({
+  ensure_installed = { 'php' },
+})
+
+local dap = require('dap')
+
+dap.adapters.php = {
+  type = 'executable',
+  command = 'php-debug-adapter',
+}
+
+dap.configurations.php = {
+  {
+    type = 'php',
+    request = 'launch',
+    name = 'PHP 8.0: Listen for Xdebug',
+    port = 9080,
+  },
+  {
+    type = 'php',
+    request = 'launch',
+    name = 'PHP 8.1: Listen for Xdebug',
+    port = 9081,
+  },
+  {
+    type = 'php',
+    request = 'launch',
+    name = 'PHP 8.2: Listen for Xdebug',
+    port = 9082,
+  },
+}
+
+dap.configurations.javascriptreact = {
+  {
+    type = 'pwa-chrome',
+    request = 'attach',
+    program = '${file}',
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    protocol = 'inspector',
+    port = 9222,
+    webRoot = '${workspaceFolder}'
+  }
+}
+
+dap.configurations.typescriptreact = {
+  {
+    type = 'pwa-chrome',
+    request = 'attach',
+    program = '${file}',
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    protocol = 'inspector',
+    port = 9222,
+    webRoot = '${workspaceFolder}'
+  }
+}
+
+require('dap-vscode-js').setup({
+  adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+})
+
+for _, language in ipairs({ 'typescript', 'javascript', 'vue' }) do
+  dap.configurations[language] = {
+    {
+      type = 'pwa-chrome',
+      request = 'attach',
+      name = 'Attach Program (pwa-chrome)',
+      program = '${file}',
+      cwd = vim.fn.getcwd(),
+      sourceMaps = true,
+      port = function()
+        return vim.fn.input('Port: ', '9222')
+      end,
+      address = function()
+        return vim.fn.input('Hostname: ', 'localhost')
+      end,
+      webRoot = '${workspaceFolder}',
+    },
+  }
+end
+
+vim.keymap.set({ 'n', 'v' }, '<leader>db', require('dap').toggle_breakpoint, { desc = '[D]AP Toggle [B]reakpoint' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dp', require('dap').list_breakpoints, { desc = '[D]AP List Break[p]oints' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dC', require('dap').clear_breakpoints, { desc = '[D]AP [C]lear Breakpoints' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dc', require('dap').continue, { desc = '[D]AP [C]ontinue' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dl', require('dap').run_last, { desc = '[D]AP Run [L]ast Debugger' })
+vim.keymap.set({ 'n', 'v' }, '<leader>do', require('dap').step_over, { desc = '[D]AP [S]tep [O]ver' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dO', require('dap').step_out, { desc = '[D]AP [S]tep [O]ut' })
+vim.keymap.set({ 'n', 'v' }, '<leader>di', require('dap').step_into, { desc = '[D]AP [S]tep [I]nto' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dt', require('dap').terminate, { desc = '[D]AP [T]erminate' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dR', require('dap').restart, { desc = '[D]AP [R]estart' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dr', require('dap.repl').toggle, { desc = '[D]AP Toggle [R]epl' })
+
+vim.api.nvim_create_autocmd("Filetype", {
+  pattern = { "dap-repl" },
+  callback = function() require('dap.ext.autocompl').attach() end
+})
+
+vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
+  require('dap.ui.widgets').hover()
+end, { desc = '[D]AP [H]over' })
+
+vim.keymap.set('n', '<leader>df', function()
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.frames)
+end, { desc = '[D]AP [F]rames' })
+
+vim.keymap.set('n', '<leader>ds', function()
+  local widgets = require('dap.ui.widgets')
+  widgets.centered_float(widgets.scopes)
+end, { desc = '[D]AP [S]copes' })
+
+require('dapui').setup()
+vim.keymap.set({ 'n', 'v' }, '<leader>du', require('dapui').toggle, { desc = '[D]AP Toggle [R]epl' })
 
 require("lspsaga").setup({
   request_timeout = 5000,
@@ -667,7 +804,7 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-b>'] = cmp.mapping.scroll_docs(-1),
+    ['<C-b>'] = cmp.mapping.scroll_docs( -1),
     ['<C-f>'] = cmp.mapping.scroll_docs(1),
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<C-Space>'] = cmp.mapping.confirm {
@@ -689,8 +826,8 @@ cmp.setup {
     ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif luasnip.jumpable( -1) then
+        luasnip.jump( -1)
       else
         fallback()
       end
@@ -701,6 +838,7 @@ cmp.setup {
     { name = 'luasnip' },
     { name = 'path' },
     { name = 'buffer' },
+    { name = 'omni' }
   },
 }
 -- `/` cmdline setup.
