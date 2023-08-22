@@ -25,7 +25,12 @@ return {
       vim.cmd.colorscheme('gruvbox')
     end
   },
-
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   {
     'bluz71/vim-nightfly-colors',
     name = 'nightfly',
@@ -52,6 +57,18 @@ return {
       },
       view = {
         width = 50,
+        float = {
+          enable = true,
+          quit_on_focus_loss = true,
+          open_win_config = {
+            relative = "editor",
+            border = "rounded",
+            width = 60,
+            height = 30,
+            row = 1,
+            col = 1,
+          },
+        },
       },
       git = {
         ignore = false,
@@ -160,5 +177,14 @@ return {
       { '<Tab>',   '<cmd>BufferLineCycleNext<cr>', desc = 'Next buffer' },
       { '<S-Tab>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Previous buffer' },
     },
+  },
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      window = {
+        width = .75 -- width will be 85% of the editor width
+      }
+    },
+    keys = { { '<leader>zz', '<cmd>ZenMode<cr>', desc = 'Toggle ZenMode' }, }
   },
 }

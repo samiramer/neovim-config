@@ -105,6 +105,7 @@ return {
         cssls = {},
         tsserver = {},
         intelephense = {
+          maxMemory = 2048,
           format = {
             enable = false
           }
@@ -159,29 +160,37 @@ return {
       -- null-ls will be hooked onto the LSP server by mason-null-ls
       require('null-ls').setup {
         debug = true,
-        ensure_installed = { 'eslint_d', 'prettierd', 'phpcbf', 'phpcsfixer' },
+        ensure_installed = { 'prettierd', 'eslint', 'markdownlint', 'phpcbf', 'phpcsfixer' },
         sources = {
-          require('null-ls').builtins.diagnostics.eslint_d.with({
+          require('null-ls').builtins.code_actions.gitsigns,
+          require('null-ls').builtins.code_actions.eslint.with({
+            condition = function(utils)
+              return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
+            end,
+          }),
+          require('null-ls').builtins.diagnostics.markdownlint,
+          require('null-ls').builtins.diagnostics.eslint.with({
             condition = function(utils)
               return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
             end,
           }),
           require('null-ls').builtins.diagnostics.trail_space.with({ disabled_filetypes = { 'NvimTree', 'text', 'log' } }),
-          require('null-ls').builtins.formatting.eslint_d.with({
+          require('null-ls').builtins.formatting.prettierd.with({
+            condition = function(utils)
+              return utils.root_has_file({ '.prettierrc' })
+            end,
+          }),
+          require('null-ls').builtins.formatting.eslint.with({
             condition = function(utils)
               return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
             end,
           }),
+          require('null-ls').builtins.formatting.markdownlint,
           require('null-ls').builtins.formatting.phpcbf,
           require('null-ls').builtins.formatting.phpcsfixer.with({
             env = { PHP_CS_FIXER_IGNORE_ENV = 'True' },
             condition = function(utils)
               return utils.root_has_file({ '.php-cs-fixer.php' })
-            end,
-          }),
-          require('null-ls').builtins.formatting.prettierd.with({
-            condition = function(utils)
-              return utils.root_has_file({ '.prettierrc' })
             end,
           }),
         }

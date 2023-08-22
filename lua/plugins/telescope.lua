@@ -16,6 +16,7 @@ return {
       { '<leader>fc', function() require('telescope.builtin').grep_string() end, desc = 'Find Word In Files' },
       { '<leader>fd', function() require('telescope.builtin').diagnostics() end, desc = 'Find Diagnostics' },
       { '<leader>fk', function() require('telescope.builtin').keymaps() end,     desc = 'Find Keymaps' },
+      { '<leader>ft', function() require('telescope.builtin').colorscheme({enable_preview=true}) end,     desc = 'Switch colorscheme' },
       {
         '<leader>fw',
         function() require('telescope').extensions.live_grep_args.live_grep_args() end,

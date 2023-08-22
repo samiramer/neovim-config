@@ -50,7 +50,6 @@ local function lsp()
     errors = "Error",
     warnings = "Warn",
     info = "Info",
-    hints = "Hint",
   }
 
   for k, level in pairs(levels) do
@@ -59,23 +58,19 @@ local function lsp()
 
   local errors = ""
   local warnings = ""
-  local hints = ""
   local info = ""
 
   if count["errors"] ~= 0 then
-    errors = "  " .. count["errors"]
+    errors = "  " .. count["errors"]
   end
   if count["warnings"] ~= 0 then
     warnings = "  " .. count["warnings"]
   end
-  if count["hints"] ~= 0 then
-    hints = "  " .. count["hints"]
-  end
   if count["info"] ~= 0 then
-    info = "  " .. count["info"]
+    info = "  " .. count["info"]
   end
 
-  return errors .. warnings .. hints .. info .. "%#Normal#"
+  return errors .. warnings .. info .. "%#Normal#"
 end
 
 local function filetype()
@@ -87,6 +82,22 @@ local function lineinfo()
     return ""
   end
   return " %P %l:%c "
+end
+
+local function lsp_clients()
+  local msg = 'No Active Lsp'
+  local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+  local clients = vim.lsp.get_active_clients()
+  if next(clients) == nil then
+    return msg
+  end
+  for _, client in ipairs(clients) do
+    local filetypes = client.config.filetypes
+    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+      return client.name
+    end
+  end
+  return msg
 end
 
 local vcs = function()
@@ -132,7 +143,9 @@ Statusline.active = function()
     "%#Normal#",
     lsp(),
     "%=%#StatusLineExtra#",
+    "%#Normal#",
     vcs(),
+    lsp_clients(),
     filetype(),
     lineinfo(),
   }

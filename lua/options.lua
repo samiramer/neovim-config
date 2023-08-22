@@ -54,3 +54,5 @@ vim.o.swapfile = false
 vim.o.writebackup = false
 
 vim.o.wrap = false
+
+vim.o.relativenumber = true
