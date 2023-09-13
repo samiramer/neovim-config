@@ -11,7 +11,7 @@ return {
     keys = {
       { '<leader>ff', function() require('telescope.builtin').find_files() end,  desc = 'Find files' },
       { '<leader>fb', function() require('telescope.builtin').buffers() end,     desc = 'Find Buffers' },
-      { '<leader>fg', function() require('telescope.builtin').git_status() end,  desc = 'Find Opened Git Files' },
+      { '<leader>fo', function() require('telescope.builtin').git_status() end,  desc = 'Find Opened Git Files' },
       { '<leader>fh', function() require('telescope.builtin').help_tags() end,   desc = 'Find Help' },
       { '<leader>fc', function() require('telescope.builtin').grep_string() end, desc = 'Find Word In Files' },
       { '<leader>fd', function() require('telescope.builtin').diagnostics() end, desc = 'Find Diagnostics' },
@@ -34,31 +34,8 @@ return {
       },
     },
     config = function()
-      local telescope = require("telescope")
-      local actions = require("telescope.actions")
-
-      telescope.setup{
-        path_display = { "truncate " },
-        mappings = {
-          i = {
-            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-j>"] = actions.move_selection_next, -- move to next result
-            ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-          }
-        },
-        defaults = {
-          layout_config = {
-            horizontal = {
-              height = 0.95,
-              preview_cutoff = 60,
-              width = 0.95
-            },
-          }
-        }
-      }
-
-      telescope.load_extension('fzf')
-      telescope.load_extension('live_grep_args')
+      require('telescope').load_extension('fzf')
+      require('telescope').load_extension('live_grep_args')
     end,
   },
 }

@@ -17,7 +17,7 @@ vim.o.cursorline = true
 -- Global statusline
 vim.o.laststatus = 3
 
-vim.o.cmdheight = 1
+vim.o.cmdheight = 0
 
 -- Hide the mode, we are using lualine for this
 vim.o.showmode = false
@@ -56,4 +56,3 @@ vim.o.writebackup = false
 vim.o.wrap = false
 
 vim.o.relativenumber = true
-

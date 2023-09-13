@@ -1,202 +1,193 @@
 return {
-  {
-    -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+	"neovim/nvim-lspconfig",
+	dependencies = {
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		"folke/neodev.nvim",
+		"mhartington/formatter.nvim",
+		"creativenull/efmls-configs-nvim",
+	},
+	event = { "BufReadPre", "BufNewFile" },
+	config = function()
+		local on_attach = function(_, bufnr)
+			vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-      -- -- Useful status updates for LSP
-      -- 'j-hui/fidget.nvim',
+			local opts = { buffer = bufnr }
+			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
+			vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
 
-      -- Additional lua configuration, makes nvim stuff amazing
-      'folke/neodev.nvim',
+			vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+			vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
+			vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
 
-      -- Additional json LS schemas
-      'b0o/schemastore.nvim',
+			vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
+			vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols, opts)
+			vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts)
 
-      -- For external formatting tools (eslint_d, etc)
-      'jose-elias-alvarez/null-ls.nvim',
-      'jayp0521/mason-null-ls.nvim',
+			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+			vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
+			vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
 
-      -- Autocompletion support
-      'hrsh7th/nvim-cmp',
-      'hrsh7th/cmp-nvim-lsp',
+			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+			vim.keymap.set("n", "<leader>lf", function()
+				vim.lsp.buf.format({ timeout_ms = 5000 })
+			end, opts)
+		end
 
-      "nvim-treesitter/nvim-treesitter"
-    },
-    config = function()
-      -- LSP settings.
+		require("mason").setup()
+		require("mason-lspconfig").setup({
+			automatic_installation = true,
+			ensure_installed = { "volar", "lua_ls", "intelephense" },
+		})
 
-      -- Enable debug mode
-      -- vim.lsp.set_log_level("debug")
+		require("neodev").setup()
 
-      -- This function gets run when an LSP connects to a particular buffer.
-      local on_attach = function(_, bufnr)
-        -- NOTE: Remember that lua is a real programming language, and as such it is possible
-        -- to define small helper and utility functions so you don't have to repeat yourself
-        -- many times.
-        --
-        -- In this case, we create a function that lets us more easily define mappings specific
-        -- for LSP related items. It sets the mode, buffer and description for us each time.
-        local map = function(keys, func, desc, mode)
-          if desc then
-            desc = 'LSP: ' .. desc
-          end
+		local lspconfig = require("lspconfig")
+		lspconfig.intelephense.setup({
+			on_attach = on_attach,
+			settings = {
+				maxMemory = 4096,
+				format = {
+					enable = false,
+				},
+			},
+		})
 
-          if not mode then
-            mode = 'n'
-          end
+		lspconfig.lua_ls.setup({
+			on_attach = on_attach,
+			settings = {
+				Lua = {
+					workspace = { checkThirdParty = false },
+					telemetry = { enable = false },
+				},
+			},
+		})
 
-          vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
-        end
+		lspconfig.volar.setup({
+			on_attach = on_attach,
+			settings = {
+				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+			},
+		})
 
-        map('<leader>lr', vim.lsp.buf.rename, 'LSP Rename')
-        map('<leader>la', vim.lsp.buf.code_action, 'LSP Code Action')
+		-- Register linters and formatters per language
+		local eslint = require("efmls-configs.linters.eslint")
+		local eslint_fmt = require("efmls-configs.formatters.eslint")
+		local prettier = require("efmls-configs.formatters.prettier")
+		local stylua = require("efmls-configs.formatters.stylua")
+		local phpcsfixer = require("efmls-configs.formatters.php_cs_fixer")
+		local languages = {
+			typescript = { eslint, eslint_fmt, prettier },
+			typescriptreact = { eslint, eslint_fmt, prettier },
+			javascript = { eslint, eslint_fmt, prettier },
+			javascriptreact = { eslint, eslint_fmt, prettier },
+			vue = { eslint, eslint_fmt, prettier },
+			php = { phpcsfixer },
+			lua = { stylua },
+		}
 
-        map('gd', vim.lsp.buf.definition, 'Goto Definition')
-        map('gr', require('telescope.builtin').lsp_references, 'Goto References')
-        map('gI', vim.lsp.buf.implementation, 'Goto Implementation')
+		lspconfig.efm.setup({
+			on_attach = on_attach,
+			filetypes = vim.tbl_keys(languages),
+			settings = {
+				rootMarkers = { ".git/" },
+				languages = languages,
+			},
+			init_options = {
+				documentFormatting = true,
+				documentRangeFormatting = true,
+				hover = true,
+				documentSymbol = true,
+				codeAction = true,
+				completion = true,
+			},
+		})
 
-        map('<leader>lD', vim.lsp.buf.type_definition, 'LSP Type Definition')
-        map('<leader>lds', require('telescope.builtin').lsp_document_symbols, 'LSP Document Symbols')
-        map('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'LSP Workspace Symbols')
+		--		local function prettier_package_json_key_exists(project_root)
+		--			local ok, has_prettier_key = pcall(function()
+		--				local package_json_blob =
+		--					table.concat(vim.fn.readfile(require("lspconfig.util").path.join(project_root, "/package.json")))
+		--				local package_json = vim.json.decode(package_json_blob) or {}
+		--				return not not package_json.prettier
+		--			end)
+		--			return ok and has_prettier_key
+		--		end
+		--
+		--		local function prettier_config_file_exists(project_root)
+		--			return (not not project_root) and vim.tbl_count(vim.fn.glob(".prettierrc*", true, true)) > 0
+		--				or vim.tbl_count(vim.fn.glob("prettier.config.*", true, true)) > 0
+		--		end
+		--
+		--		local function prettier()
+		--			local startpath = vim.fn.getcwd()
+		--			local project_root = (
+		--				require("lspconfig.util").find_git_ancestor(startpath)
+		--				or require("lspconfig.util").find_package_json_ancestor(startpath)
+		--			)
+		--			if prettier_config_file_exists(project_root) or prettier_package_json_key_exists(project_root) then
+		--				return require("formatter.defaults.prettier")()
+		--			end
+		--		end
+		--
+		--		require("formatter").setup({
+		--			filetype = {
+		--				lua = {
+		--					require("formatter.filetypes.lua").stylua,
+		--				},
+		--				php = {
+		--					require("formatter.filetypes.php").php_cs_fixer,
+		--				},
+		--				javascript = {
+		--					require("formatter.filetypes.javascript").eslint_d,
+		--					prettier,
+		--				},
+		--				javascriptreact = {
+		--					require("formatter.filetypes.javascript").eslint_d,
+		--					prettier,
+		--				},
+		--				typescript = {
+		--					require("formatter.filetypes.typescript").eslint_d,
+		--					prettier,
+		--				},
+		--				typescriptreact = {
+		--					require("formatter.filetypes.typescript").eslint_d,
+		--					prettier,
+		--				},
+		--				vue = {
+		--					require("formatter.filetypes.typescript").eslint_d,
+		--					prettier,
+		--        }
+		--			},
+		--		})
+		--
+		--    vim.keymap.set("n", "<leader>lf", ":Format<cr>")
 
-        -- See `:help K` for why this keymap
-        map('K', vim.lsp.buf.hover, 'Hover Documentation')
-        map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation')
-        map('<C-s>', vim.lsp.buf.signature_help, 'Signature Documentation', 'i')
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+			callback = function(ev)
+				vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-        -- Lesser used LSP functionality
-        map('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-        map('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'LSP Workspace Add Folder')
-        map('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'LSP Workspace Remove Folder')
-        map('<leader>lwl', function()
-          print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, 'LSP Workspace List Folders')
+				local opts = { buffer = ev.buf }
+				vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
 
-        -- Create a command `:Format` local to the LSP buffer
-        vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-          vim.lsp.buf.format({ timeout_ms = 5000 })
-          -- vim.lsp.buf.format {
-          --   filter = function(client) return client.name ~= "intelephense" end
-          -- }
-        end, { desc = 'Format current buffer with LSP' })
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
+				vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
 
-        map('<leader>lf', ":Format<CR>", 'LSP Format current buffer')
-      end
+				vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols, opts)
+				vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts)
 
-      -- vim.keymap.set('n', '<leader>lk', ':Lspsaga diagnostic_jump_next<CR>')
-      -- vim.keymap.set('n', '<leader>lj', ':Lspsaga diagnostic_jump_prev<CR>')
-      -- vim.keymap.set('n', '<leader>le', ':Lspsaga show_line_diagnostics<CR>')
-      vim.keymap.set('n', '<leader>lk', vim.diagnostic.goto_next)
-      vim.keymap.set('n', '<leader>lj', vim.diagnostic.goto_prev)
-      vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float)
-      vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
 
-      -- Enable the following language servers
-      --  Add/remove any LSPs that you want here. They will automatically be installed.
-      --
-      --  Add any additional override configuration in the following tables. They will be passed to
-      --  the `settings` field of the server config. You must look up that documentation yourself.
-      local servers = {
-        cssls = {},
-        tsserver = {},
-        intelephense = {
-          maxMemory = 2048,
-          format = {
-            enable = false
-          }
-        },
-        -- tailwindcss = {},
-        jsonls = {
-          json = {
-            schemas = require('schemastore').json.schemas(),
-          },
-        },
-        volar = {
-          -- Enable "Take Over Mode" where volar will provide all JS/TS LSP services
-          -- This drastically improves the responsiveness of diagnostic updates on change
-          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-        },
-        lua_ls = {
-          Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-          },
-        },
-      }
-
-      -- Setup neovim lua configuration
-      require('neodev').setup()
-      --
-      -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-      -- Setup mason so it can manage external tooling
-      require('mason').setup()
-
-      -- Ensure the servers above are installed
-      local mason_lspconfig = require 'mason-lspconfig'
-
-      mason_lspconfig.setup {
-        ensure_installed = vim.tbl_keys(servers),
-      }
-
-      mason_lspconfig.setup_handlers {
-        function(server_name)
-          require('lspconfig')[server_name].setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers[server_name],
-          }
-        end,
-      }
-
-      -- Enable the following external sources for formatting and diagnostics
-      -- null-ls will be hooked onto the LSP server by mason-null-ls
-      require('null-ls').setup {
-        debug = true,
-        ensure_installed = { 'prettierd', 'eslint', 'markdownlint', 'phpcbf', 'phpcsfixer' },
-        sources = {
-          require('null-ls').builtins.code_actions.gitsigns,
-          require('null-ls').builtins.code_actions.eslint.with({
-            condition = function(utils)
-              return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
-            end,
-          }),
-          require('null-ls').builtins.diagnostics.markdownlint,
-          require('null-ls').builtins.diagnostics.eslint.with({
-            condition = function(utils)
-              return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
-            end,
-          }),
-          require('null-ls').builtins.diagnostics.trail_space.with({ disabled_filetypes = { 'NvimTree', 'text', 'log' } }),
-          require('null-ls').builtins.formatting.prettierd.with({
-            condition = function(utils)
-              return utils.root_has_file({ '.prettierrc' })
-            end,
-          }),
-          require('null-ls').builtins.formatting.eslint.with({
-            condition = function(utils)
-              return utils.root_has_file({ '.eslintrc.js', '.eslintrc', '.eslintrc.cjs' })
-            end,
-          }),
-          require('null-ls').builtins.formatting.markdownlint,
-          require('null-ls').builtins.formatting.phpcbf,
-          require('null-ls').builtins.formatting.phpcsfixer.with({
-            env = { PHP_CS_FIXER_IGNORE_ENV = 'True' },
-            condition = function(utils)
-              return utils.root_has_file({ '.php-cs-fixer.php' })
-            end,
-          }),
-        }
-      }
-
-      require('mason-null-ls').setup({ automatic_installation = true })
-    end
-  }
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+				vim.keymap.set("n", "<leader>lf", function()
+					vim.lsp.buf.format({ timeout_ms = 5000 })
+				end, opts)
+			end,
+		})
+	end,
 }

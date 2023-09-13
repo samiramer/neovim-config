@@ -1,4 +1,3 @@
-require('options')
-require('core')
-require('keymaps')
-require('statusline')
+require("options")
+require("keymaps")
+require("core")
