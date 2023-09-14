@@ -4,7 +4,7 @@ return {
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
     opts = {
-      contrast = 'medium',
+      contrast = 'hard',
       bold = false,
       invert_selection = true,
     },
