@@ -4,8 +4,9 @@ return {
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"folke/neodev.nvim",
-		"mhartington/formatter.nvim",
 		"creativenull/efmls-configs-nvim",
+		"hrsh7th/nvim-cmp",
+		"hrsh7th/cmp-nvim-lsp",
 	},
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
@@ -17,8 +18,13 @@ return {
 
 		require("neodev").setup()
 
+		-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+		local capabilities = vim.lsp.protocol.make_client_capabilities()
+		capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
 		local lspconfig = require("lspconfig")
 		lspconfig.intelephense.setup({
+      capabilities = capabilities,
 			settings = {
 				maxMemory = 4096,
 				format = {
@@ -28,6 +34,7 @@ return {
 		})
 
 		lspconfig.lua_ls.setup({
+      capabilities = capabilities,
 			settings = {
 				Lua = {
 					workspace = { checkThirdParty = false },
@@ -37,6 +44,7 @@ return {
 		})
 
 		lspconfig.volar.setup({
+      capabilities = capabilities,
 			settings = {
 				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 			},
@@ -54,6 +62,7 @@ return {
 
 		-- Use efm for linting
 		lspconfig.efm.setup({
+      capabilities = capabilities,
 			filetypes = vim.tbl_keys(languages),
 			settings = {
 				rootMarkers = { ".git/" },
@@ -69,68 +78,6 @@ return {
 				completion = true,
 			},
 		})
-
-		local function prettier_package_json_key_exists(project_root)
-			local ok, has_prettier_key = pcall(function()
-				local package_json_blob =
-					table.concat(vim.fn.readfile(require("lspconfig.util").path.join(project_root, "/package.json")))
-				local package_json = vim.json.decode(package_json_blob) or {}
-				return not not package_json.prettier
-			end)
-			return ok and has_prettier_key
-		end
-
-		local function prettier_config_file_exists(project_root)
-			return (not not project_root) and vim.tbl_count(vim.fn.glob(".prettierrc*", true, true)) > 0
-				or vim.tbl_count(vim.fn.glob("prettier.config.*", true, true)) > 0
-		end
-
-		local function prettier()
-			local startpath = vim.fn.getcwd()
-			local project_root = (
-				require("lspconfig.util").find_git_ancestor(startpath)
-				or require("lspconfig.util").find_package_json_ancestor(startpath)
-			)
-			if prettier_config_file_exists(project_root) or prettier_package_json_key_exists(project_root) then
-				return require("formatter.defaults.prettier")()
-			end
-		end
-
-		require("formatter").setup({
-			filetype = {
-				lua = {
-					require("formatter.filetypes.lua").stylua,
-				},
-				php = {
-					require("formatter.filetypes.php").php_cs_fixer,
-				},
-				javascript = {
-					prettier,
-					require("formatter.filetypes.javascript").eslint_d,
-				},
-				javascriptreact = {
-					prettier,
-					require("formatter.filetypes.javascript").eslint_d,
-				},
-				typescript = {
-					prettier,
-					require("formatter.filetypes.typescript").eslint_d,
-				},
-				typescriptreact = {
-					prettier,
-					require("formatter.filetypes.typescript").eslint_d,
-				},
-				vue = {
-					prettier,
-					require("formatter.filetypes.typescript").eslint_d,
-				},
-				twig = {
-					prettier,
-				},
-			},
-		})
-
-		vim.keymap.set("n", "<leader>lf", ":Format<cr>")
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
