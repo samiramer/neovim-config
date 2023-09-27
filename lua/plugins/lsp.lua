@@ -87,8 +87,10 @@ return {
 				local opts = { buffer = ev.buf }
 				vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
 				vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, opts)
 
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+        vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
 				vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
 				vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
 
