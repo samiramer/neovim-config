@@ -12,7 +12,7 @@ return {
       vim.o.termguicolors = true
       vim.o.background = 'dark'
       require('gruvbox').setup(opts)
-      vim.cmd.colorscheme('gruvbox')
+      -- vim.cmd.colorscheme('gruvbox')
     end
   },
 }
