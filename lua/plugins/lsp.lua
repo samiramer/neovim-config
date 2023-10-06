@@ -13,7 +13,7 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			automatic_installation = true,
-			ensure_installed = { "volar", "lua_ls", "intelephense" },
+			ensure_installed = { "volar", "lua_ls", "intelephense", "efm" },
 		})
 
 		require("neodev").setup()
@@ -95,8 +95,12 @@ return {
 				vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
 
 				vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("n", "<leader>lde", require("telescope.builtin").diagnostics, opts)
 				vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols, opts)
 				vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts)
+
+				vim.keymap.set("n", "<leader>lj", vim.diagnostic.goto_next, opts)
+				vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev, opts)
 
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 				vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, opts)
