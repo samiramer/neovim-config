@@ -37,6 +37,9 @@ return {
 					php = {
 						require("formatter.filetypes.php").php_cs_fixer,
 					},
+					c = {
+						require("formatter.filetypes.c").clangformat,
+					},
 					javascript = {
 						prettier,
 						require("formatter.filetypes.javascript").eslint_d,

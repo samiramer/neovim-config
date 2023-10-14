@@ -24,7 +24,7 @@ return {
 
 		local lspconfig = require("lspconfig")
 		lspconfig.intelephense.setup({
-      capabilities = capabilities,
+			capabilities = capabilities,
 			settings = {
 				maxMemory = 4096,
 				format = {
@@ -34,7 +34,7 @@ return {
 		})
 
 		lspconfig.lua_ls.setup({
-      capabilities = capabilities,
+			capabilities = capabilities,
 			settings = {
 				Lua = {
 					workspace = { checkThirdParty = false },
@@ -44,25 +44,31 @@ return {
 		})
 
 		lspconfig.volar.setup({
-      capabilities = capabilities,
+			capabilities = capabilities,
 			settings = {
 				filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 			},
 		})
 
+		lspconfig.clangd.setup({
+			capabilities = capabilities,
+		})
+
 		-- Register linters language
 		local eslint = require("efmls-configs.linters.eslint_d")
+		local cpplint = require("efmls-configs.linters.cpplint")
 		local languages = {
 			typescript = { eslint },
 			typescriptreact = { eslint },
 			javascript = { eslint },
 			javascriptreact = { eslint },
 			vue = { eslint },
+			c = { cpplint },
 		}
 
 		-- Use efm for linting
 		lspconfig.efm.setup({
-      capabilities = capabilities,
+			capabilities = capabilities,
 			filetypes = vim.tbl_keys(languages),
 			settings = {
 				rootMarkers = { ".git/" },
@@ -87,10 +93,10 @@ return {
 				local opts = { buffer = ev.buf }
 				vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts)
 				vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opts)
-        vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, opts)
+				vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, opts)
 
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, opts)
 				vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, opts)
 				vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
 
