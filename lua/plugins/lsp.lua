@@ -7,13 +7,15 @@ return {
 		"creativenull/efmls-configs-nvim",
 		"hrsh7th/nvim-cmp",
 		"hrsh7th/cmp-nvim-lsp",
+		-- Additional json LS schemas
+		"b0o/schemastore.nvim",
 	},
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			automatic_installation = true,
-			ensure_installed = { "volar", "lua_ls", "intelephense", "efm" },
+			ensure_installed = { "tsserver", "jsonls", "volar", "lua_ls", "intelephense", "efm" },
 		})
 
 		require("neodev").setup()
@@ -39,6 +41,19 @@ return {
 				Lua = {
 					workspace = { checkThirdParty = false },
 					telemetry = { enable = false },
+				},
+			},
+		})
+
+		lspconfig.tsserver.setup({
+			capabilities = capabilities,
+		})
+
+		lspconfig.jsonls.setup({
+			capabilities = capabilities,
+			settings = {
+				json = {
+					schemas = require("schemastore").json.schemas(),
 				},
 			},
 		})
