@@ -28,7 +28,7 @@ return {
 		lspconfig.intelephense.setup({
 			capabilities = capabilities,
 			settings = {
-				maxMemory = 4096,
+				maxMemory = 8192,
 				format = {
 					enable = false,
 				},
