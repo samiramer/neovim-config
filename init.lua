@@ -1,8 +1,7 @@
 require("options")
+require("plugins")
 require("keymaps")
-require("core")
 require("statusline")
 
-vim.o.termguicolors = true
-vim.o.background = "dark"
-vim.cmd.colorscheme("catppuccin")
+-- final steps
+vim.cmd.colorscheme("kanagawa")

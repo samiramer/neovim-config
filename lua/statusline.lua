@@ -1,13 +1,14 @@
+-- statusline
 -- https://nuxsh.is-a.dev/blog/custom-nvim-statusline.html
 local modes = {
   ["n"] = "NORMAL",
   ["no"] = "NORMAL",
   ["v"] = "VISUAL",
   ["V"] = "VISUAL LINE",
-  [""] = "VISUAL BLOCK",
+  [""] = "VISUAL BLOCK",
   ["s"] = "SELECT",
   ["S"] = "SELECT LINE",
-  [""] = "SELECT BLOCK",
+  [""] = "SELECT BLOCK",
   ["i"] = "INSERT",
   ["ic"] = "INSERT",
   ["R"] = "REPLACE",
@@ -136,8 +137,8 @@ Statusline = {}
 Statusline.active = function()
   return table.concat {
     "%#Statusline#",
-    mode(),
-    "%#Normal# ",
+    -- mode(),
+    "%#Normal#",
     filepath(),
     filename(),
     "%#Normal#",
@@ -167,3 +168,4 @@ vim.api.nvim_exec([[
   au WinEnter,BufEnter,FileType NvimTree setlocal statusline=%!v:lua.Statusline.short()
   augroup END
 ]], false)
+
