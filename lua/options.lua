@@ -36,6 +36,8 @@ vim.o.writebackup = false
 -- enable mouse mode
 vim.o.mouse = 'a'
 
+vim.o.conceallevel = 2
+
 -- Adjust tab spacing for PHP files
 vim.api.nvim_create_autocmd("Filetype", {
   pattern = { "php" },

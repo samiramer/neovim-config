@@ -480,6 +480,37 @@ local plugins = {
 		"tpope/vim-commentary",
 		event = { "BufReadPre", "BufNewFile" },
 	},
+
+	-- obsidian
+	{
+		"epwalsh/obsidian.nvim",
+		version = "*", -- recommended, use latest release instead of latest commit
+		lazy = false,
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"hrsh7th/nvim-cmp",
+			"nvim-telescope/telescope.nvim",
+			"nvim-treesitter",
+		},
+		keys = {
+			{
+				"<leader>ot",
+				":ObsidianToday<CR>",
+			},
+		},
+		opts = {
+			workspaces = {
+				{
+					name = "master",
+					path = "~/Notes/master-vault",
+				},
+			},
+			daily_notes = {
+				-- Optional, if you keep daily notes in a separate directory.
+				folder = "daily-notes",
+			},
+		},
+	},
 }
 
 require("lazy").setup(plugins, opts)
