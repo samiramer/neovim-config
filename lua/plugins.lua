@@ -287,7 +287,7 @@ local plugins = {
 				automatic_installation = true,
 				ensure_installed = {
 					"stylua",
-					"eslint",
+          "eslint_d",
 					"prettier",
 					"phpcsfixer",
 					"twigcs",
@@ -302,10 +302,10 @@ local plugins = {
 					null_ls.builtins.formatting.prettier.with({
 						filetypes = vim.list_extend(null_ls.builtins.formatting.prettier.filetypes, { "twig" }),
 					}),
-					null_ls.builtins.formatting.eslint,
+					null_ls.builtins.formatting.eslint_d,
 					null_ls.builtins.formatting.phpcsfixer,
 					null_ls.builtins.diagnostics.twigcs,
-					null_ls.builtins.diagnostics.eslint,
+					null_ls.builtins.diagnostics.eslint_d,
 					null_ls.builtins.diagnostics.trail_space.with({
 						disabled_filetypes = { "NvimTree", "text", "log" },
 					}),
