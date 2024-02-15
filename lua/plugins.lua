@@ -236,7 +236,17 @@ local plugins = {
 			require("mason").setup()
 			require("mason-lspconfig").setup({
 				automatic_installation = true,
-				ensure_installed = { "tsserver", "jsonls", "volar", "lua_ls", "intelephense", "efm" },
+				ensure_installed = {
+					"tsserver",
+					"jsonls",
+					"volar",
+					"lua_ls",
+					"intelephense",
+					"efm",
+					"cssls",
+					"emmet_language_server",
+					"tailwindcss",
+				},
 			})
 
 			require("neodev").setup()
@@ -283,12 +293,43 @@ local plugins = {
 				},
 			})
 
+			lspconfig.emmet_language_server.setup({
+				capabilities = capabilities,
+				settings = {
+					filetypes = {
+						"css",
+						"eruby",
+						"html",
+						"javascript",
+						"javascriptreact",
+						"less",
+						"sass",
+						"scss",
+						"pug",
+						"typescriptreact",
+						"twig",
+						"vue",
+					},
+				},
+			})
+
+			local css_capabilities = vim.lsp.protocol.make_client_capabilities()
+			css_capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+			lspconfig.cssls.setup({
+				capabilities = css_capabilities,
+			})
+
+			lspconfig.tailwindcss.setup({
+				capabilities = css_capabilities,
+			})
+
 			require("mason-null-ls").setup({
 				automatic_installation = true,
 				ensure_installed = {
 					"stylua",
-          "eslint_d",
-					"prettier",
+					"eslint_d",
+					"prettierd",
 					"phpcsfixer",
 					"twigcs",
 				},
@@ -299,7 +340,7 @@ local plugins = {
 				debug = true,
 				sources = {
 					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.prettier.with({
+					null_ls.builtins.formatting.prettierd.with({
 						filetypes = vim.list_extend(null_ls.builtins.formatting.prettier.filetypes, { "twig" }),
 					}),
 					null_ls.builtins.formatting.eslint_d,
@@ -485,7 +526,7 @@ local plugins = {
 	{
 		"epwalsh/obsidian.nvim",
 		version = "*", -- recommended, use latest release instead of latest commit
-		lazy = false,
+		event = "VeryLazy",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/nvim-cmp",
@@ -510,6 +551,116 @@ local plugins = {
 				folder = "daily-notes",
 			},
 		},
+	},
+
+	-- smooth scrolling
+	{
+		"karb94/neoscroll.nvim",
+		config = function()
+			require("neoscroll").setup({ easing_function = "sine" })
+		end,
+	},
+
+	-- surround selections
+	{
+		"kylechui/nvim-surround",
+		version = "*", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
+		config = function()
+			require("nvim-surround").setup({})
+		end,
+	},
+
+	-- autopairs
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		opts = {}, -- this is equalent to setup({}) function
+	},
+
+	-- auto tagging
+	{
+		"windwp/nvim-ts-autotag",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
+	},
+
+	-- statusline
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			-- require("lualine").setup({})
+		end,
+	},
+
+	-- harpoon
+	{
+		"ThePrimeagen/harpoon",
+		branch = "harpoon2",
+    event = "VeryLazy",
+		dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+		config = function()
+			local harpoon = require("harpoon")
+
+			-- REQUIRED
+			harpoon:setup()
+			-- REQUIRED
+
+			vim.keymap.set("n", "<leader>a", function()
+				harpoon:list():append()
+			end)
+			vim.keymap.set("n", "<C-e>", function()
+				harpoon.ui:toggle_quick_menu(harpoon:list())
+			end)
+
+			vim.keymap.set("n", "<C-1>", function()
+				harpoon:list():select(1)
+			end)
+			vim.keymap.set("n", "<C-2>", function()
+				harpoon:list():select(2)
+			end)
+			vim.keymap.set("n", "<C-3>", function()
+				harpoon:list():select(3)
+			end)
+			vim.keymap.set("n", "<C-4>", function()
+				harpoon:list():select(4)
+			end)
+
+			-- Toggle previous & next buffers stored within Harpoon list
+			vim.keymap.set("n", "<C-P>", function()
+				harpoon:list():prev()
+			end)
+			vim.keymap.set("n", "<C-N>", function()
+				harpoon:list():next()
+			end)
+
+			-- basic telescope configuration
+			local conf = require("telescope.config").values
+			local function toggle_telescope(harpoon_files)
+				local file_paths = {}
+				for _, item in ipairs(harpoon_files.items) do
+					table.insert(file_paths, item.value)
+				end
+
+				require("telescope.pickers")
+					.new({}, {
+						prompt_title = "Harpoon",
+						finder = require("telescope.finders").new_table({
+							results = file_paths,
+						}),
+						previewer = conf.file_previewer({}),
+						sorter = conf.generic_sorter({}),
+					})
+					:find()
+			end
+
+			vim.keymap.set("n", "<C-e>", function()
+				toggle_telescope(harpoon:list())
+			end, { desc = "Open harpoon window" })
+		end,
 	},
 }
 
