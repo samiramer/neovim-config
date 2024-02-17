@@ -21,7 +21,12 @@ local plugins = {
 	{ "rebelot/kanagawa.nvim", priority = 1000, config = true },
 
 	-- gruvbox colorscheme
-	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = { contrast = "hard", bold = false } },
+	{
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
+		config = true,
+		opts = { contrast = "hard", bold = false, invert_selection = true },
+	},
 
 	-- telescope
 	{
