@@ -43,36 +43,42 @@ local plugins = {
 				function()
 					require("telescope.builtin").find_files()
 				end,
+				desc = "Find files",
 			},
 			{
 				"<leader>fw",
 				function()
 					require("telescope.builtin").live_grep()
 				end,
+				desc = "Live grep",
 			},
 			{
 				"<leader>fc",
 				function()
 					require("telescope.builtin").grep_string()
 				end,
+				desc = "Search word",
 			},
 			{
 				"<leader>fb",
 				function()
 					require("telescope.builtin").buffers()
 				end,
+				desc = "Find buffers",
 			},
 			{
 				"<leader>fd",
 				function()
 					require("telescope.builtin").diagnostics()
 				end,
+				desc = "Find diagnostics",
 			},
 			{
 				"<leader>fg",
 				function()
 					require("telescope.builtin").git_status()
 				end,
+				desc = "Find modified files",
 			},
 		},
 		config = function()
@@ -108,7 +114,7 @@ local plugins = {
 	{
 		"famiu/bufdelete.nvim",
 		keys = {
-			{ "<leader>cc", "<cmd>Bdelete<cr>", {} },
+			{ "<leader>cc", "<cmd>Bdelete<cr>", desc = "Close buffer" },
 		},
 	},
 
@@ -363,32 +369,49 @@ local plugins = {
 				callback = function(event)
 					vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-					local o = { buffer = event.buf }
-					vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, o)
-					vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, o)
-					vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, o)
+					local options = function(desc)
+						desc = desc or ""
+						return { buffer = event.buf, desc = desc }
+					end
+
+					vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, options("Rename symbol"))
+					vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, options("Code action"))
+					vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, options("Line diagnostics"))
 					vim.keymap.set("n", "<leader>lf", function()
 						vim.lsp.buf.format({ async = true })
-					end, o)
+					end, options("Format file"))
 
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, o)
-					vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, o)
-					vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, o)
-					vim.keymap.set("n", "gI", vim.lsp.buf.implementation, o)
+					vim.keymap.set("n", "gd", vim.lsp.buf.definition, options("Go to definition"))
+					vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, options("Go to type definition"))
+					vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, options("Show references"))
+					vim.keymap.set("n", "gI", vim.lsp.buf.implementation, options("Show implementation"))
 
-					vim.keymap.set("n", "<leader>lD", vim.lsp.buf.type_definition, o)
-					vim.keymap.set("n", "<leader>lde", require("telescope.builtin").diagnostics, o)
-					vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols, o)
-					vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, o)
+					vim.keymap.set(
+						"n",
+						"<leader>lde",
+						require("telescope.builtin").diagnostics,
+						options("Show document diagnostics")
+					)
+					vim.keymap.set(
+						"n",
+						"<leader>lds",
+						require("telescope.builtin").lsp_document_symbols,
+						options("Show document symbols")
+					)
+					vim.keymap.set(
+						"n",
+						"<leader>lws",
+						require("telescope.builtin").lsp_dynamic_workspace_symbols,
+						options("Show workspace symbols")
+					)
 
-					vim.keymap.set("n", "<leader>lj", vim.diagnostic.goto_next, o)
-					vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev, o)
+					vim.keymap.set("n", "<leader>lj", vim.diagnostic.goto_next, options("Show next diagnostic"))
+					vim.keymap.set("n", "<leader>lk", vim.diagnostic.goto_prev, options("Show previous diagnostic"))
 
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, o)
-					vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, o)
-					vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, o)
+					vim.keymap.set("n", "K", vim.lsp.buf.hover, options("Hover"))
+					vim.keymap.set("n", "<C-s>", vim.lsp.buf.signature_help, options("Signature help"))
 
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, o)
+					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, options("Go to declaration"))
 				end,
 			})
 		end,
@@ -405,22 +428,22 @@ local plugins = {
 		opts = {
 			on_attach = function(_)
 				local gs = package.loaded.gitsigns
-				vim.keymap.set("n", "<leader>gj", gs.next_hunk)
-				vim.keymap.set("n", "<leader>gk", gs.prev_hunk)
-				vim.keymap.set({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>")
-				vim.keymap.set({ "n", "v" }, "<leader>gh", ":Gitsigns reset_hunk<CR>")
-				vim.keymap.set("n", "<leader>ghS", gs.stage_buffer)
-				vim.keymap.set("n", "<leader>ghu", gs.undo_stage_hunk)
-				vim.keymap.set("n", "<leader>gr", gs.reset_buffer)
-				vim.keymap.set("n", "<leader>gp", gs.preview_hunk)
+				vim.keymap.set("n", "<leader>gj", gs.next_hunk, { desc = "Go to next hunk" })
+				vim.keymap.set("n", "<leader>gk", gs.prev_hunk, { desc = "Go to previous hunk" })
+				vim.keymap.set({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage hunk" })
+				vim.keymap.set({ "n", "v" }, "<leader>gh", ":Gitsigns reset_hunk<CR>", { desc = "Reset hunk" })
+				vim.keymap.set("n", "<leader>gb", gs.stage_buffer, { desc = "Stage buffer" })
+				vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage buffer" })
+				vim.keymap.set("n", "<leader>gr", gs.reset_buffer, { desc = "Reset buffer" })
+				vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
 				vim.keymap.set("n", "<leader>gl", function()
 					gs.blame_line({ full = true })
-				end)
-				vim.keymap.set("n", "<leader>gd", gs.diffthis)
+				end, { desc = "Git blame" })
+				vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Diff this" })
 				vim.keymap.set("n", "<leader>gD", function()
 					gs.diffthis("~")
-				end)
-				vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+				end, { desc = "Diff this ~" })
+				vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
 			end,
 		},
 	},
@@ -597,7 +620,7 @@ local plugins = {
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
-			-- require("lualine").setup({})
+			require("lualine").setup({})
 		end,
 	},
 
