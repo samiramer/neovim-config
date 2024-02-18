@@ -4,4 +4,4 @@ require("keymaps")
 require("statusline")
 
 -- final steps
-vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("gruvbox")
