@@ -133,42 +133,6 @@ return {
 		config = function()
 			local dap = require("dap")
 
-			dap.adapters.codelldb = {
-				name = "codelldb",
-				type = "server",
-				port = "13000",
-				executable = {
-					command = "codelldb",
-					args = { "--port", "13000" },
-				},
-			}
-
-			dap.configurations.c = {
-				{
-					name = "Launch",
-					type = "codelldb",
-					request = "launch",
-					program = function()
-						return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-					end,
-					cwd = "${workspaceFolder}",
-					stopOnEntry = false,
-					args = {},
-
-					-- 💀
-					-- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
-					--
-					--    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-					--
-					-- Otherwise you might get the following error:
-					--
-					--    Error on launch: Failed to attach to the target process
-					--
-					-- But you should be aware of the implications:
-					-- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
-					-- runInTerminal = false,
-				},
-			}
 			dap.adapters.php = {
 				type = "executable",
 				command = "php-debug-adapter",
@@ -178,28 +142,15 @@ return {
 				{
 					type = "php",
 					request = "launch",
-					name = "PHP 8.2: Listen for Xdebug",
-					port = 9082,
-				},
-				{
-					type = "php",
-					request = "launch",
-					name = "PHP 8.1: Listen for Xdebug",
-					port = 9081,
-				},
-				{
-					type = "php",
-					request = "launch",
-					name = "PHP 8.0: Listen for Xdebug",
-					port = 9080,
-				},
-				{
-					type = "php",
-					request = "launch",
-					name = "PHP 7.0: Listen for Xdebug",
-					port = 9070,
+					name = "PHP: Listen for Xdebug",
+					hostname = "0.0.0.0",
+					port = 9003,
+					pathMappings = {
+						["/var/www/html"] = "${workspaceFolder}",
+					},
 				},
 			}
 		end,
 	},
+
 }
