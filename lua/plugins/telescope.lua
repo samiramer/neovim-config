@@ -11,7 +11,7 @@ return {
 			{
 				"<leader>ff",
 				function()
-					require("telescope.builtin").find_files()
+					require("telescope.builtin").find_files({ hidden = true })
 				end,
 				desc = "Find files",
 			},
@@ -56,6 +56,24 @@ return {
 			local actions = require("telescope.actions")
 
 			telescope.setup({
+				pickers = {
+					live_grep = {
+						file_ignore_patterns = { "node_modules", ".git", "vendor" },
+						additional_args = function(_)
+							return { "--hidden" }
+						end,
+					},
+					grep_string = {
+						file_ignore_patterns = { "node_modules", ".git", "vendor" },
+						additional_args = function(_)
+							return { "--hidden" }
+						end,
+					},
+					find_files = {
+						file_ignore_patterns = { "node_modules", ".git", "vendor" },
+						hidden = true,
+					},
+				},
 				path_display = { "truncate " },
 				mappings = {
 					i = {
