@@ -1,37 +1,42 @@
 return {
-	"nvim-treesitter/nvim-treesitter",
-	event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-	version = false,
-	build = ":TSUpdate",
-  opts = {
-			auto_install = true,
-			highlight = { enable = true },
-			indent = { enable = true },
-			ensure_installed = {
-				"bash",
-				"c",
-				"html",
-				"javascript",
-				"json",
-				"lua",
-				"luadoc",
-				"luap",
-				"markdown",
-				"markdown_inline",
-				"php",
-				"tsx",
-				"twig",
-				"tsx",
-				"typescript",
-				"vim",
-				"vue",
-				"vimdoc",
-				"yaml",
-			},
-  },
-	config = function(opts)
-		require("nvim-treesitter.configs").setup(opts)
-	end,
+	{
+		"nvim-treesitter/nvim-treesitter",
+		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		version = false,
+		build = ":TSUpdate",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				auto_install = true,
+				sync_install = true,
+				highlight = { enable = true },
+				indent = { enable = true },
+				ignore_install = {},
+				modules = { "all" },
+				ensure_installed = {
+					"bash",
+					"c",
+					"html",
+					"javascript",
+					"json",
+					"lua",
+					"luadoc",
+					"luap",
+					"markdown",
+					"markdown_inline",
+					"php",
+					"phpdoc",
+					"tsx",
+					"twig",
+					"tsx",
+					"typescript",
+					"vim",
+					"vue",
+					"vimdoc",
+					"yaml",
+				},
+			})
+		end,
+	},
 
 	-- auto tagging
 	{
@@ -50,6 +55,6 @@ return {
 
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
-		lazy = true,
+		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
 	},
 }
