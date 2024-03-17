@@ -88,7 +88,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local opts = {}
+local options = {}
 local plugins = {
   {
     "rebelot/kanagawa.nvim",
@@ -97,14 +97,37 @@ local plugins = {
   },
   {
     'nvim-telescope/telescope.nvim', branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make',
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end,
+      },
+    },
     keys = {
       { '<leader>ff', function() require('telescope.builtin').find_files() end, { desc = '[F]ind [f]iles' } },
       { '<leader>fw', function() require('telescope.builtin').live_grep() end, { desc = '[F]ind [w]ords' } },
       { '<leader>fb', function() require('telescope.builtin').buffers() end, { desc = '[F]ind [b]uffer' } },
       { '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = '[F]ind [G]it file' } },
       { '<leader>fs', function() require('telescope.builtin').grep_string() end, { desc = '[F]ind [s]tring under cursor' } },
+      { '<leader>fc', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = '[F]ind [c]olorscheme' } },
     },
+    config = function ()
+      require('telescope').setup({
+        extensions = {
+          ['ui-select'] = {
+            require('telescope.themes').get_dropdown(),
+          },
+        },
+      })
+
+      pcall(require('telescope').load_extension, 'fzf')
+      pcall(require('telescope').load_extension, 'ui-select')
+    end,
   },
   {
     'hrsh7th/nvim-cmp',
@@ -320,8 +343,53 @@ local plugins = {
       }
     end,
   },
+  {
+    'folke/todo-comments.nvim',
+    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false }
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    opts = {
+        ensure_installed = {
+          "bash",
+          "lua",
+          "html",
+          "javascript",
+          "json",
+          "luadoc",
+          "luap",
+          "markdown",
+          "markdown_inline",
+          "php",
+          "tsx",
+          "twig",
+          "typescript",
+          "vim",
+          "vue",
+          "vimdoc",
+          "yaml"
+        },
+        auto_install = true,
+        highlight = {
+          enable = true,
+          disable = function(lang, buf)
+              local max_filesize = 100 * 1024 -- 100 KB
+              local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+              if ok and stats and stats.size > max_filesize then
+                  return true
+              end
+          end,
+        },
+    },
+    config = function(_, opts)
+      require'nvim-treesitter.configs'.setup(opts)
+    end,
+  }
 }
 
-require("lazy").setup(plugins, opts)
+require("lazy").setup(plugins, options)
 
 vim.cmd.colorscheme("kanagawa-wave")
