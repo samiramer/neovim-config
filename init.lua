@@ -105,13 +105,102 @@ local plugins = {
       { '<leader>fg', function() require('telescope.builtin').git_files() end, { desc = '[F]ind [G]it file' } },
       { '<leader>fs', function() require('telescope.builtin').grep_string() end, { desc = '[F]ind [s]tring under cursor' } },
     },
--- nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
--- nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
--- nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>}
+  },
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+      {
+        'L3MON4D3/LuaSnip',
+        build = (function()
+          return 'make install_jsregexp'
+        end)(),
+        dependencies = {
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
+        },
+      },
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-buffer',
+    },
+    config = function()
+      local cmp = require 'cmp'
+      local luasnip = require 'luasnip'
+      luasnip.config.setup {}
+
+      cmp.setup {
+--        window = {
+--          completion = cmp.config.window.bordered(),
+--          documentation = cmp.config.window.bordered(),
+--        },
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        completion = { completeopt = 'menu,menuone,noinsert' },
+        mapping = cmp.mapping.preset.insert {
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<C-Space>'] = cmp.mapping.complete {},
+          ['<C-l>'] = cmp.mapping(function()
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { 'i', 's' }),
+          ['<C-h>'] = cmp.mapping(function()
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { 'i', 's' }),
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'path' },
+          { name = 'buffer' },
+        },
+      }
+
+      cmp.setup.cmdline('/', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'buffer' },
+        },
+      })
+
+       cmp.setup.cmdline(":", {
+         mapping = cmp.mapping.preset.cmdline(),
+         sources = cmp.config.sources(
+           {
+             { name = "path" },
+           },
+           {
+             {
+               name = "cmdline",
+               option = {
+                   ignore_cmds = { "Man", "!" },
+               },
+             },
+           }
+         ),
+       })
+    end,
   },
   {
     'neovim/nvim-lspconfig',
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    cmd = "Mason",
     dependencies = {
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
@@ -153,10 +242,14 @@ local plugins = {
       })
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
+      local css_capabilities = vim.lsp.protocol.make_client_capabilities()
+      css_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       local servers = {
         lua_ls = {
+          capabilities = capabilities,
           settings = {
             Lua = {
               completion = {
@@ -165,6 +258,46 @@ local plugins = {
               diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        intelephense = {
+          capabilities = capabilities,
+          settings = {
+            maxMemory = 8192,
+            format = {
+              enable = false,
+            },
+          },
+        },
+        volar = {
+          capabilities = capabilities,
+          settings = {
+            filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+          },
+        },
+        emmet_language_server = {
+          capabilities = capabilities,
+          settings = {
+            filetypes = {
+              "css",
+              "eruby",
+              "html",
+              "javascript",
+              "javascriptreact",
+              "less",
+              "sass",
+              "scss",
+              "pug",
+              "typescriptreact",
+              "twig",
+              "vue",
+            },
+          },
+        },
+        cssls = {
+          capabilities = css_capabilities,
+        },
+        tailwindcss = {
+          capabilities = css_capabilities,
         },
       }
 
