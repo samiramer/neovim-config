@@ -38,11 +38,11 @@ vim.o.mouse = 'a'
 
 vim.o.conceallevel = 2
 
--- Adjust tab spacing for PHP files
-vim.api.nvim_create_autocmd("Filetype", {
-  pattern = { "php" },
-  command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab"
-})
+---- Adjust tab spacing for PHP files
+--vim.api.nvim_create_autocmd("Filetype", {
+--  pattern = { "php" },
+--  command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab"
+--})
 
 -- Ease of life keymaps
 vim.keymap.set("i", "jk", "<Esc>", { silent = true })
@@ -159,10 +159,6 @@ local plugins = {
       luasnip.config.setup {}
 
       cmp.setup {
---        window = {
---          completion = cmp.config.window.bordered(),
---          documentation = cmp.config.window.bordered(),
---        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -222,7 +218,7 @@ local plugins = {
   },
   {
     'neovim/nvim-lspconfig',
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    event = { "BufReadPre", "BufNewFile" },
     cmd = "Mason",
     dependencies = {
       'williamboman/mason.nvim',
@@ -246,7 +242,7 @@ local plugins = {
           map('<leader>lds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
           map('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
           map('<leader>lr', vim.lsp.buf.rename, '[R]ename')
-          map('<leader>lca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          map('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
           local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -344,14 +340,12 @@ local plugins = {
     end,
   },
   {
-    'folke/todo-comments.nvim',
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false }
+    'tpope/vim-commentary',
+    event = { "BufReadPre", "BufNewFile" },
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
         ensure_installed = {
           "bash",
@@ -381,15 +375,106 @@ local plugins = {
               if ok and stats and stats.size > max_filesize then
                   return true
               end
+
+              local highlight_langs = { 'twig' }
+              return vim.tbl_contains(highlight_langs, lang)
           end,
         },
     },
     config = function(_, opts)
       require'nvim-treesitter.configs'.setup(opts)
     end,
-  }
-}
+  },
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    event = { "BufReadPre", "BufNewFile" },
+  },
+  {
+    "tpope/vim-sleuth",
+    event = { "BufReadPre", "BufNewFile" },
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    event = { "BufReadPre", "BufNewFile" },
+    opts = {
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+      on_attach = function()
+        local gs = package.loaded.gitsigns
+        vim.keymap.set("n", "<leader>gj", gs.next_hunk, { desc = "Go to next hunk" })
+        vim.keymap.set("n", "<leader>gk", gs.prev_hunk, { desc = "Go to previous hunk" })
+        vim.keymap.set({ "n", "v" }, "<leader>gs", gs.stage_hunk, { desc = "Stage hunk" })
+        vim.keymap.set({ "n", "v" }, "<leader>gh", gs.reset_hunk, { desc = "Reset hunk" })
+        vim.keymap.set("n", "<leader>gb", gs.stage_buffer, { desc = "Stage buffer" })
+        vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage buffer" })
+        vim.keymap.set("n", "<leader>gr", gs.reset_buffer, { desc = "Reset buffer" })
+        vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
+        vim.keymap.set("n", "<leader>gl", function() gs.blame_line({ full = true }) end, { desc = "Git blame" })
+        vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Diff this" })
+        vim.keymap.set("n", "<leader>gD", function() gs.diffthis("~") end, { desc = "Diff this ~" })
+
+      end,
+    },
+  },
+  { "christoomey/vim-tmux-navigator", lazy = false },
+  {
+    'echasnovski/mini.nvim',
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require('mini.ai').setup { n_lines = 500 }
+      require('mini.surround').setup()
+      local statusline = require 'mini.statusline'
+
+      statusline.setup {
+        use_icons = true,
+        set_vim_settings = false,
+        content = {
+          active = function ()
+            local mode, _ = statusline.section_mode({ trunc_width = 120 })
+            local git           = statusline.section_git({ trunc_width = 75 })
+            local diagnostics   = statusline.section_diagnostics({ trunc_width = 75 })
+            local filename      = statusline.section_filename({ trunc_width = 140 })
+            local fileinfo      = statusline.section_fileinfo({ trunc_width = 120 })
+            local location      = statusline.section_location({ trunc_width = 75 })
+            local search        = statusline.section_searchcount({ trunc_width = 75 })
+
+            return statusline.combine_groups({
+              { hl = 'Normal',     strings = { mode } },
+              '%<', -- Mark general truncate point
+              { hl = 'Normal', strings = { filename } },
+              '%=', -- End left alignment
+              { hl = 'Normal', strings = { diagnostics, git } },
+              { hl = 'Normal', strings = { fileinfo } },
+              { hl = 'Normal', strings = { search, location } },
+            })
+          end
+        }
+      }
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_location = function()
+        return '%2l:%-2v'
+      end
+
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_fileinfo = function(args)
+        local filetype = vim.bo.filetype
+
+        if (filetype == '') or vim.bo.buftype ~= '' then return '' end
+
+        if MiniStatusline.is_truncated(args.trunc_width) then return filetype end
+
+        local encoding = vim.bo.fileencoding or vim.bo.encoding
+
+        return string.format('%s %s', filetype, encoding)
+      end
+    end,
+  },}
 
 require("lazy").setup(plugins, options)
 
-vim.cmd.colorscheme("kanagawa-wave")
+vim.cmd.colorscheme('kanagawa')
