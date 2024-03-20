@@ -97,12 +97,12 @@ vim.opt.rtp:prepend(lazypath)
 
 local options = {}
 local plugins = {
-	{
+	{ -- colorscheme
 		"rebelot/kanagawa.nvim",
 		lazy = false,
 		priority = 1000,
 	},
-	{
+	{ -- telescope
 		"nvim-telescope/telescope.nvim",
 		branch = "0.1.x",
 		dependencies = {
@@ -173,7 +173,7 @@ local plugins = {
 			pcall(require("telescope").load_extension, "ui-select")
 		end,
 	},
-	{
+	{ -- autocompletions
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
@@ -257,7 +257,7 @@ local plugins = {
 			})
 		end,
 	},
-	{
+	{ -- lsp setup
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
 		cmd = "Mason",
@@ -389,11 +389,11 @@ local plugins = {
 			})
 		end,
 	},
-	{
+	{ -- code commenting
 		"tpope/vim-commentary",
 		event = { "BufReadPre", "BufNewFile" },
 	},
-	{
+	{ -- treesitter (syntax highlighting and other nice features)
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {
@@ -434,18 +434,18 @@ local plugins = {
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
-	{
+	{ -- context based commenting support
 		"JoosepAlviste/nvim-ts-context-commentstring",
 		event = { "BufReadPre", "BufNewFile" },
 	},
-	{
+	{ -- autodetect shiftwidth and tabstop
 		"tpope/vim-sleuth",
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
 			vim.g.sleuth_twig_heuristics = 0
 		end,
 	},
-	{
+	{ -- adds git signs to the gutter and other useful git features
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {
@@ -476,13 +476,18 @@ local plugins = {
 			end,
 		},
 	},
-	{ "christoomey/vim-tmux-navigator", lazy = false },
-	{
+	{ "christoomey/vim-tmux-navigator", lazy = false }, -- vim keybings to jump between tmux and nvim
+	{ -- nice utility plugin with useful modules
 		"echasnovski/mini.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
+			-- Better Around/Inside textobjects
 			require("mini.ai").setup({ n_lines = 500 })
+
+			-- Add/delete/replace surroundings (brackets, quotes, etc.)
 			require("mini.surround").setup()
+
+			-- Simple and easy statusline.
 			local statusline = require("mini.statusline")
 
 			statusline.setup({
@@ -531,7 +536,7 @@ local plugins = {
 			end
 		end,
 	},
-	{
+	{ -- code formatting
 		"stevearc/conform.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		keys = {
@@ -556,7 +561,7 @@ local plugins = {
 			},
 		},
 	},
-	{
+	{ -- code linting
 		"mfussenegger/nvim-lint",
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
@@ -579,7 +584,7 @@ local plugins = {
 			})
 		end,
 	},
-	{
+	{ -- Debug adapter protocol support
 		"mfussenegger/nvim-dap",
 		dependencies = {
 			"theHamsta/nvim-dap-virtual-text",
