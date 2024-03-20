@@ -12,6 +12,8 @@ vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.breakindent = true
 vim.o.wrap = false
+vim.o.autoindent = true
+vim.o.smartindent = true
 
 -- show line numbers
 vim.wo.number = true
@@ -376,8 +378,7 @@ local plugins = {
                   return true
               end
 
-              local highlight_langs = { 'twig' }
-              return vim.tbl_contains(highlight_langs, lang)
+              return false
           end,
         },
     },
@@ -392,6 +393,9 @@ local plugins = {
   {
     "tpope/vim-sleuth",
     event = { "BufReadPre", "BufNewFile" },
+    config = function ()
+      vim.g.sleuth_twig_heuristics = 0
+    end
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -473,7 +477,24 @@ local plugins = {
         return string.format('%s %s', filetype, encoding)
       end
     end,
-  },}
+  },
+  {
+    'stevearc/conform.nvim',
+    event = { "BufReadPre", "BufNewFile" },
+    keys = {
+      {
+        '<leader>lf',
+        function() require('conform').format({async = true, lsp_fallback = true}) end,
+        { desc = '[F]ormat buffer' }
+      }
+    },
+    opts = {
+      formatters_by_ft = {
+      lua = { "stylua" },
+      }
+    },
+  }
+}
 
 require("lazy").setup(plugins, options)
 
