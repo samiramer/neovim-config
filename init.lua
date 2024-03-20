@@ -162,6 +162,19 @@ local plugins = {
 		},
 		config = function()
 			require("telescope").setup({
+				defaults = {
+					layout_strategy = "vertical",
+					layout_config = {
+						height = function(_, _, l)
+							return l
+						end,
+						width = function(_, c, _)
+							return c
+						end,
+						prompt_position = "top",
+						preview_height = 0.70,
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -265,7 +278,7 @@ local plugins = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			{ "j-hui/fidget.nvim", opts = {} },
+			{ "j-hui/fidget.nvim", opts = { progress = { display = { done_ttl = 1 } } } },
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
@@ -550,7 +563,7 @@ local plugins = {
 		},
 		opts = {
 			formatters_by_ft = {
-				php = { "phpcs" },
+				-- php = { "phpcs" },
 				lua = { "stylua" },
 				vue = { "prettier", "eslint_d" },
 				javascript = { "prettier", "eslint_d" },
@@ -568,7 +581,7 @@ local plugins = {
 			local lint = require("lint")
 
 			lint.linters_by_ft = {
-				php = { "phpstan" },
+				-- php = { "phpstan" },
 				vue = { "eslint_d" },
 				javascript = { "eslint_d" },
 				javascriptreact = { "eslint_d" },
