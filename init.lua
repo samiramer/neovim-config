@@ -46,7 +46,7 @@ vim.o.showmode = false
 vim.o.colorcolumn = "100"
 
 -- live preview substitions
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- show which line your cursor is on
 vim.opt.cursorline = true
