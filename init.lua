@@ -365,6 +365,8 @@ local plugins = {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua",
+				"prettier",
+        "eslint_d",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -538,8 +540,36 @@ local plugins = {
 		opts = {
 			formatters_by_ft = {
 				lua = { "stylua" },
+				vue = { "prettier", "eslint_d" },
+				javascript = { "prettier", "eslint_d" },
+				javascriptreact = { "prettier", "eslint_d" },
+				typescript = { "prettier", "eslint_d" },
+				typescriptreact = { "prettier", "eslint_d" },
+				twig = { "prettier" },
 			},
 		},
+	},
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local lint = require("lint")
+
+			lint.linters_by_ft = {
+				vue = { "eslint_d" },
+				javascript = { "eslint_d" },
+				javascriptreact = { "eslint_d" },
+				typescript = { "eslint_d" },
+				typescriptreact = { "eslint_d" },
+			}
+
+			vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+				group = vim.api.nvim_create_augroup("lint", { clear = true }),
+				callback = function()
+					lint.try_lint()
+				end,
+			})
+		end,
 	},
 }
 
