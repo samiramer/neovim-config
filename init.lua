@@ -40,11 +40,16 @@ vim.o.mouse = "a"
 
 vim.o.conceallevel = 2
 
----- Adjust tab spacing for PHP files
---vim.api.nvim_create_autocmd("Filetype", {
---  pattern = { "php" },
---  command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab"
---})
+-- don't show vi mode since we are already showing it on the status line
+vim.o.showmode = false
+
+vim.o.colorcolumn = "100"
+
+-- live preview substitions
+vim.opt.inccommand = 'split'
+
+-- show which line your cursor is on
+vim.opt.cursorline = true
 
 -- Ease of life keymaps
 vim.keymap.set("i", "jk", "<Esc>", { silent = true })
@@ -487,20 +492,18 @@ local plugins = {
 					active = function()
 						local mode, _ = statusline.section_mode({ trunc_width = 120 })
 						local git = statusline.section_git({ trunc_width = 75 })
-						local diagnostics = statusline.section_diagnostics({ trunc_width = 75 })
 						local filename = statusline.section_filename({ trunc_width = 140 })
 						local fileinfo = statusline.section_fileinfo({ trunc_width = 120 })
 						local location = statusline.section_location({ trunc_width = 75 })
-						local search = statusline.section_searchcount({ trunc_width = 75 })
 
 						return statusline.combine_groups({
 							{ hl = "Normal", strings = { mode } },
 							"%<", -- Mark general truncate point
 							{ hl = "Normal", strings = { filename } },
 							"%=", -- End left alignment
-							{ hl = "Normal", strings = { diagnostics, git } },
+							{ hl = "Normal", strings = { git } },
 							{ hl = "Normal", strings = { fileinfo } },
-							{ hl = "Normal", strings = { search, location } },
+							{ hl = "Normal", strings = { location } },
 						})
 					end,
 				},
