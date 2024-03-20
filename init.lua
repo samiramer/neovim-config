@@ -366,7 +366,9 @@ local plugins = {
 			vim.list_extend(ensure_installed, {
 				"stylua",
 				"prettier",
-        "eslint_d",
+				"eslint_d",
+				"phpcs",
+				"phpstan",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -539,6 +541,7 @@ local plugins = {
 		},
 		opts = {
 			formatters_by_ft = {
+				php = { "phpcs" },
 				lua = { "stylua" },
 				vue = { "prettier", "eslint_d" },
 				javascript = { "prettier", "eslint_d" },
@@ -556,6 +559,7 @@ local plugins = {
 			local lint = require("lint")
 
 			lint.linters_by_ft = {
+				php = { "phpstan" },
 				vue = { "eslint_d" },
 				javascript = { "eslint_d" },
 				javascriptreact = { "eslint_d" },
