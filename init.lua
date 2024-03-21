@@ -16,9 +16,9 @@ vim.o.autoindent = true
 vim.o.smartindent = true
 
 -- show line numbers
-vim.wo.number = true
-vim.wo.relativenumber = true
-vim.o.signcolumn = "yes"
+vim.wo.number = false
+vim.wo.relativenumber = false
+vim.o.signcolumn = "no"
 
 -- save undo history
 vim.o.undofile = true
@@ -69,6 +69,21 @@ vim.keymap.set({ "v" }, ">", ">gv", { silent = true, desc = "Reduce indent" })
 -- Window splitting
 vim.keymap.set("n", "<leader>=", ":split<CR>", { noremap = true, silent = true, desc = "Horizontal split" })
 vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
+
+-- Toggle the number and sign columns on and off
+vim.keymap.set("n", "<leader>tt", function()
+	local nu = { number = true, relativenumber = true, signcolumn = "yes" }
+	if vim.opt_local.number:get() or vim.opt_local.relativenumber:get() then
+		nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get(), signcolumn = vim.opt_local.signcolumn:get() }
+		vim.opt_local.number = false
+		vim.opt_local.relativenumber = false
+		vim.opt_local.signcolumn = "no"
+	else
+		vim.opt_local.number = nu.number
+		vim.opt_local.relativenumber = nu.relativenumber
+		vim.opt_local.signcolumn = nu.signcolumn
+	end
+end, { noremap = true, silent = true, desc = "[T]oggle [s]ide column" })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -469,6 +484,7 @@ local plugins = {
 				topdelete = { text = "‾" },
 				changedelete = { text = "~" },
 			},
+			signcolumn = true,
 			on_attach = function()
 				local gs = package.loaded.gitsigns
 				vim.keymap.set("n", "<leader>gj", gs.next_hunk, { desc = "Go to next hunk" })
