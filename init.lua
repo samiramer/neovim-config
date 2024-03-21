@@ -165,12 +165,12 @@ local plugins = {
 				defaults = {
 					layout_strategy = "vertical",
 					layout_config = {
-						height = function(_, _, l)
-							return l
-						end,
-						width = function(_, c, _)
-							return c
-						end,
+						-- height = function(_, _, l)
+						-- 	return l
+						-- end,
+						-- width = function(_, c, _)
+						-- 	return c
+						-- end,
 						prompt_position = "top",
 						preview_height = 0.70,
 					},
@@ -761,6 +761,81 @@ local plugins = {
 					},
 				},
 			}
+		end,
+	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		lazy = false,
+		keys = {
+			{
+				"<leader>e",
+				function()
+					require("nvim-tree.api").tree.toggle({ "find_file = true" })
+				end,
+				{ desc = "Launch file [e]xplorer" },
+			},
+		},
+		config = function()
+			local HEIGHT_RATIO = 0.8 -- You can change this
+			local WIDTH_RATIO = 0.5
+			require("nvim-tree").setup({
+				disable_netrw = true,
+				hijack_netrw = true,
+				filters = {
+					dotfiles = false,
+				},
+				git = {
+					ignore = false,
+				},
+				renderer = {
+					group_empty = true,
+				},
+				view = {
+					float = {
+						enable = true,
+						open_win_config = function()
+							local screen_w = vim.opt.columns:get()
+							local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+							local window_w = screen_w * WIDTH_RATIO
+							local window_h = screen_h * HEIGHT_RATIO
+							local window_w_int = math.floor(window_w)
+							local window_h_int = math.floor(window_h)
+							local center_x = (screen_w - window_w) / 2
+							local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
+							return {
+								border = "rounded",
+								relative = "editor",
+								row = center_y,
+								col = center_x,
+								width = window_w_int,
+								height = window_h_int,
+							}
+						end,
+					},
+					width = function()
+						return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+					end,
+				},
+			})
+
+			vim.api.nvim_create_autocmd("QuitPre", {
+				callback = function()
+					local invalid_win = {}
+					local wins = vim.api.nvim_list_wins()
+					for _, w in ipairs(wins) do
+						local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(w))
+						if bufname:match("NvimTree_") ~= nil then
+							table.insert(invalid_win, w)
+						end
+					end
+					if #invalid_win == #wins - 1 then
+						-- Should quit, so we close all invalid windows.
+						for _, w in ipairs(invalid_win) do
+							vim.api.nvim_win_close(w, true)
+						end
+					end
+				end,
+			})
 		end,
 	},
 }
