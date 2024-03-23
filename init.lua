@@ -74,7 +74,11 @@ vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true,
 vim.keymap.set("n", "<leader>tt", function()
 	local nu = { number = true, relativenumber = true, signcolumn = "yes" }
 	if vim.opt_local.number:get() or vim.opt_local.relativenumber:get() then
-		nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get(), signcolumn = vim.opt_local.signcolumn:get() }
+		nu = {
+			number = vim.opt_local.number:get(),
+			relativenumber = vim.opt_local.relativenumber:get(),
+			signcolumn = vim.opt_local.signcolumn:get(),
+		}
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
 		vim.opt_local.signcolumn = "no"
