@@ -51,6 +51,12 @@ vim.opt.inccommand = "split"
 -- show which line your cursor is on
 vim.opt.cursorline = true
 
+-- -- Adjust tab spacing for PHP files
+-- vim.api.nvim_create_autocmd("Filetype", {
+-- 	pattern = { "php" },
+-- 	command = "setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab",
+-- })
+
 -- Ease of life keymaps
 vim.keymap.set("i", "jk", "<Esc>", { silent = true })
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
@@ -405,6 +411,7 @@ local plugins = {
 				"prettier",
 				"eslint_d",
 				"phpcs",
+				"php-cs-fixer",
 				"phpstan",
 				"php-debug-adapter",
 			})
@@ -447,6 +454,7 @@ local plugins = {
 				"vimdoc",
 				"yaml",
 			},
+			indent = { enable = true },
 			auto_install = true,
 			highlight = {
 				enable = true,
@@ -586,6 +594,7 @@ local plugins = {
 				-- php = { "phpcs" },
 				lua = { "stylua" },
 				vue = { "prettier", "eslint_d" },
+				php = { "php_cs_fixer" },
 				javascript = { "prettier", "eslint_d" },
 				javascriptreact = { "prettier", "eslint_d" },
 				typescript = { "prettier", "eslint_d" },
