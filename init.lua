@@ -140,19 +140,23 @@ local plugins = {
 					return vim.fn.executable("make") == 1
 				end,
 			},
+			{
+				"nvim-telescope/telescope-live-grep-args.nvim",
+				version = "^1.0.0",
+			},
 		},
 		keys = {
 			{
 				"<leader>ff",
 				function()
-					require("telescope.builtin").find_files()
+					require("telescope.builtin").find_files({ hidden = true })
 				end,
 				{ desc = "[F]ind [f]iles" },
 			},
 			{
 				"<leader>fw",
 				function()
-					require("telescope.builtin").live_grep()
+					require("telescope").extensions.live_grep_args.live_grep_args({ hidden = true })
 				end,
 				{ desc = "[F]ind [w]ords" },
 			},
@@ -173,7 +177,7 @@ local plugins = {
 			{
 				"<leader>fs",
 				function()
-					require("telescope.builtin").grep_string()
+					require("telescope.builtin").grep_string({ hidden = true })
 				end,
 				{ desc = "[F]ind [s]tring under cursor" },
 			},
@@ -190,12 +194,6 @@ local plugins = {
 				defaults = {
 					layout_strategy = "vertical",
 					layout_config = {
-						-- height = function(_, _, l)
-						-- 	return l
-						-- end,
-						-- width = function(_, c, _)
-						-- 	return c
-						-- end,
 						prompt_position = "top",
 						preview_height = 0.70,
 					},
@@ -209,6 +207,7 @@ local plugins = {
 
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
+			pcall(require("telescope").load_extension, "live_grep_args")
 		end,
 	},
 	{ -- autocompletions
@@ -427,6 +426,11 @@ local plugins = {
 				},
 			})
 		end,
+	},
+	{
+		"pmizio/typescript-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		opts = {},
 	},
 	{ -- code commenting
 		"tpope/vim-commentary",
