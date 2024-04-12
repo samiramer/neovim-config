@@ -16,9 +16,9 @@ vim.o.autoindent = true
 vim.o.smartindent = true
 
 -- show line numbers
-vim.wo.number = false
-vim.wo.relativenumber = false
-vim.o.signcolumn = "no"
+vim.wo.number = true
+vim.wo.relativenumber = true
+vim.o.signcolumn = "yes"
 
 -- save undo history
 vim.o.undofile = true
@@ -126,6 +126,12 @@ local plugins = {
 		"rebelot/kanagawa.nvim",
 		lazy = false,
 		priority = 1000,
+	},
+	{
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
+		lazy = false,
+		config = { contrast = "hard", bold = false },
 	},
 	{ -- telescope
 		"nvim-telescope/telescope.nvim",
@@ -1049,4 +1055,4 @@ local plugins = {
 
 require("lazy").setup(plugins, options)
 
-vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("gruvbox")
