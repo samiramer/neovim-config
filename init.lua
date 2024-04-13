@@ -444,6 +444,7 @@ local plugins = {
 				"stylelint",
 				"tsserver",
 			})
+
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			require("mason-lspconfig").setup({
@@ -878,11 +879,11 @@ local plugins = {
 			},
 			{
 				"rcarriga/nvim-dap-ui",
-        -- stylua: ignore
-        keys = {
-          { '<leader>du', function() require('dapui').toggle({}) end, desc = 'Dap UI' },
-          { '<leader>de', function() require('dapui').eval() end,     desc = 'Eval',  mode = { 'n', 'v' } },
-        },
+				-- stylua: ignore
+				keys = {
+					{ '<leader>du', function() require('dapui').toggle({}) end, desc = 'Dap UI' },
+					{ '<leader>de', function() require('dapui').eval() end,     desc = 'Eval',  mode = { 'n', 'v' } },
+				},
 				opts = {},
 				config = function(_, opts)
 					local dap = require("dap")
