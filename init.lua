@@ -560,54 +560,6 @@ local plugins = {
 
 			-- Add/delete/replace surroundings (brackets, quotes, etc.)
 			require("mini.surround").setup()
-
-			-- Simple and easy statusline.
-			local statusline = require("mini.statusline")
-
-			statusline.setup({
-				use_icons = true,
-				set_vim_settings = false,
-				content = {
-					active = function()
-						local mode, _ = statusline.section_mode({ trunc_width = 120 })
-						local git = statusline.section_git({ trunc_width = 75 })
-						local filename = statusline.section_filename({ trunc_width = 140 })
-						local fileinfo = statusline.section_fileinfo({ trunc_width = 120 })
-						local location = statusline.section_location({ trunc_width = 75 })
-
-						return statusline.combine_groups({
-							{ hl = "Normal", strings = { mode } },
-							"%<", -- Mark general truncate point
-							{ hl = "Normal", strings = { filename } },
-							"%=", -- End left alignment
-							{ hl = "Normal", strings = { git } },
-							{ hl = "Normal", strings = { fileinfo } },
-							{ hl = "Normal", strings = { location } },
-						})
-					end,
-				},
-			})
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
-
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_fileinfo = function(args)
-				local filetype = vim.bo.filetype
-
-				if (filetype == "") or vim.bo.buftype ~= "" then
-					return ""
-				end
-
-				if MiniStatusline.is_truncated(args.trunc_width) then
-					return filetype
-				end
-
-				local encoding = vim.bo.fileencoding or vim.bo.encoding
-
-				return string.format("%s %s", filetype, encoding)
-			end
 		end,
 	},
 	{ -- code formatting
@@ -1054,6 +1006,73 @@ local plugins = {
 					},
 				},
 			}
+		end,
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("lualine").setup({
+				options = {
+					icons_enabled = true,
+					theme = "auto",
+					component_separators = { left = "", right = "" },
+					section_separators = { left = "", right = "" },
+					disabled_filetypes = {
+						statusline = {},
+						winbar = {},
+					},
+					ignore_focus = {},
+					always_divide_middle = true,
+					globalstatus = false,
+					refresh = {
+						statusline = 1000,
+						tabline = 1000,
+						winbar = 1000,
+					},
+				},
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = { { "filename", path = 1 } },
+					lualine_c = { "diff", "diagnostics" },
+					lualine_x = {
+						function()
+							local linters = require("lint").get_running()
+							local client_list = {}
+
+							for _, client in ipairs(vim.lsp.get_active_clients()) do
+								table.insert(client_list, client.name)
+							end
+
+							local lint_status = ""
+
+							if #linters > 0 then
+								lint_status = "  󰦕 " .. table.concat(linters, ", ")
+							end
+
+							return "󱉶 " .. table.concat(client_list, ", ") .. lint_status
+						end,
+						"branch",
+						"encoding",
+						"fileformat",
+						"filetype",
+					},
+					lualine_y = { "progress" },
+					lualine_z = { "location" },
+				},
+				inactive_sections = {
+					lualine_a = {},
+					lualine_b = {},
+					lualine_c = { { "filename", path = 1 } },
+					lualine_x = { "location" },
+					lualine_y = {},
+					lualine_z = {},
+				},
+				tabline = {},
+				winbar = {},
+				inactive_winbar = {},
+				extensions = {},
+			})
 		end,
 	},
 }
