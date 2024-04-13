@@ -330,6 +330,8 @@ local plugins = {
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
 						"[W]orkspace [S]ymbols"
 					)
+					map("<leader>lj", vim.diagnostic.goto_next, "Go to next diagnostic")
+					map("<leader>lk", vim.diagnostic.goto_prev, "Go to previous diagnostic")
 					map("<leader>le", vim.diagnostic.open_float, "G[e]t line diagnostics")
 					map("<leader>lr", vim.lsp.buf.rename, "[R]ename")
 					map("<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
