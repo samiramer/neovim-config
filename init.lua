@@ -441,6 +441,7 @@ local plugins = {
 				"php-cs-fixer",
 				"phpstan",
 				"php-debug-adapter",
+				"stylelint",
 				"tsserver",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
