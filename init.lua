@@ -417,7 +417,7 @@ local plugins = {
 							{
 								name = "@vue/typescript-plugin",
 								location = os.getenv("HOME")
-									.. "/.nvm/versions/node/v20.10.0/lib/node_modules/@vue/typescript-plugin",
+									.. "/.nvm/versions/node/v20.12.1/lib/node_modules/@vue/typescript-plugin",
 								languages = { "javascript", "typescript", "vue" },
 							},
 						},
