@@ -458,11 +458,11 @@ local plugins = {
 			})
 		end,
 	},
-	{
-		"pmizio/typescript-tools.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		opts = {},
-	},
+	-- {
+	-- 	"pmizio/typescript-tools.nvim",
+	-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+	-- 	opts = {},
+	-- },
 	{ -- code commenting
 		"tpope/vim-commentary",
 		event = { "BufReadPre", "BufNewFile" },
