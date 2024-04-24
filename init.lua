@@ -421,6 +421,9 @@ local plugins = {
 								languages = { "vue" },
 							},
 						},
+						tsserver = {
+							logVerbosity = 'off',
+						},
 					},
 					filetypes = {
 						"javascript",
