@@ -370,6 +370,9 @@ local plugins = {
 						},
 					},
 				},
+				eslint = {
+					capabilities = capabilities,
+				},
 				intelephense = {
 					capabilities = capabilities,
 					settings = {
@@ -422,7 +425,7 @@ local plugins = {
 							},
 						},
 						tsserver = {
-							logVerbosity = 'off',
+							logVerbosity = "off",
 						},
 					},
 					filetypes = {
@@ -575,6 +578,7 @@ local plugins = {
 				"<leader>lf",
 				function()
 					require("conform").format({ async = true, lsp_fallback = true })
+					if vim.fn.exists(':EslintFixAll') > 0 then vim.cmd('EslintFixAll') end
 				end,
 				{ desc = "[F]ormat buffer" },
 			},
@@ -583,39 +587,39 @@ local plugins = {
 			formatters_by_ft = {
 				-- php = { "phpcs" },
 				lua = { "stylua" },
-				vue = { "prettier", "eslint_d" },
+				vue = { "prettier" },
 				php = { "php_cs_fixer" },
-				javascript = { "prettier", "eslint_d" },
-				javascriptreact = { "prettier", "eslint_d" },
-				typescript = { "prettier", "eslint_d" },
-				typescriptreact = { "prettier", "eslint_d" },
+				javascript = { "prettier" },
+				javascriptreact = { "prettier" },
+				typescript = { "prettier" },
+				typescriptreact = { "prettier" },
 				twig = { "prettier" },
 			},
 		},
 	},
-	{ -- code linting
-		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			local lint = require("lint")
+	-- { -- code linting
+	-- 	"mfussenegger/nvim-lint",
+	-- 	event = { "BufReadPre", "BufNewFile" },
+	-- 	config = function()
+	-- 		local lint = require("lint")
 
-			lint.linters_by_ft = {
-				-- php = { "phpstan" },
-				vue = { "eslint_d" },
-				javascript = { "eslint_d" },
-				javascriptreact = { "eslint_d" },
-				typescript = { "eslint_d" },
-				typescriptreact = { "eslint_d" },
-			}
+	-- 		lint.linters_by_ft = {
+	-- 			-- php = { "phpstan" },
+	-- 			vue = { "eslint_d" },
+	-- 			javascript = { "eslint_d" },
+	-- 			javascriptreact = { "eslint_d" },
+	-- 			typescript = { "eslint_d" },
+	-- 			typescriptreact = { "eslint_d" },
+	-- 		}
 
-			vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
-				group = vim.api.nvim_create_augroup("lint", { clear = true }),
-				callback = function()
-					lint.try_lint()
-				end,
-			})
-		end,
-	},
+	-- 		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+	-- 			group = vim.api.nvim_create_augroup("lint", { clear = true }),
+	-- 			callback = function()
+	-- 				lint.try_lint()
+	-- 			end,
+	-- 		})
+	-- 	end,
+	-- },
 	{ -- Debug adapter protocol support
 		"mfussenegger/nvim-dap",
 		dependencies = {
