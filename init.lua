@@ -421,7 +421,7 @@ local plugins = {
 								name = "@vue/typescript-plugin",
 								location = os.getenv("HOME")
 									.. "/.nvm/versions/node/v20.12.2/lib/node_modules/@vue/typescript-plugin",
-								languages = { "vue" },
+								languages = { "typescript", "vue" },
 							},
 						},
 						tsserver = {
@@ -442,7 +442,6 @@ local plugins = {
 			vim.list_extend(ensure_installed, {
 				"stylua",
 				"prettier",
-				"eslint_d",
 				"phpcs",
 				"php-cs-fixer",
 				"phpstan",
