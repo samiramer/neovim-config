@@ -199,10 +199,6 @@ local plugins = {
 			require("telescope").setup({
 				defaults = {
 					layout_strategy = "vertical",
-					layout_config = {
-						prompt_position = "top",
-						preview_height = 0.70,
-					},
 				},
 				extensions = {
 					["ui-select"] = {
