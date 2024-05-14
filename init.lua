@@ -427,6 +427,8 @@ local plugins = {
 					filetypes = {
 						"javascript",
 						"typescript",
+						"typescriptreact",
+						"javascriptreact",
 						"vue",
 					},
 				},
