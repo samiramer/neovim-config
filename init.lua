@@ -133,6 +133,36 @@ local plugins = {
 		lazy = false,
 		config = { contrast = "hard", bold = false },
 	},
+	{
+		"bluz71/vim-nightfly-colors",
+		name = "nightfly",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.g.nightflyNormalFloat = true
+			vim.g.nightflyCursorColor = true
+			vim.g.nightflyVirtualTextColor = true
+			vim.g.nightflyWinSeparator = 2
+			vim.opt.fillchars = {
+				horiz = "━",
+				horizup = "┻",
+				horizdown = "┳",
+				vert = "┃",
+				vertleft = "┫",
+				vertright = "┣",
+				verthoriz = "╋",
+			}
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+				border = "single",
+			})
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signatureHelp, {
+				border = "single",
+			})
+			vim.diagnostic.config({ float = { border = "single" } })
+
+			require("nightfly")
+		end,
+	},
 	{ -- telescope
 		"nvim-telescope/telescope.nvim",
 		branch = "0.1.x",
@@ -242,6 +272,10 @@ local plugins = {
 			luasnip.config.setup({})
 
 			cmp.setup({
+				window = {
+					completion = cmp.config.window.bordered(winhighlight),
+					documentation = cmp.config.window.bordered(winhighlight),
+				},
 				snippet = {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
@@ -1091,4 +1125,4 @@ local plugins = {
 
 require("lazy").setup(plugins, options)
 
-vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("nightfly")
