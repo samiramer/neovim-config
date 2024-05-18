@@ -575,7 +575,9 @@ local plugins = {
 				"<leader>lf",
 				function()
 					require("conform").format({ async = true, lsp_fallback = true })
-					if vim.fn.exists(':EslintFixAll') > 0 then vim.cmd('EslintFixAll') end
+					if vim.fn.exists(":EslintFixAll") > 0 then
+						vim.cmd("EslintFixAll")
+					end
 				end,
 				{ desc = "[F]ormat buffer" },
 			},
