@@ -814,6 +814,7 @@ local plugins = {
 					group_empty = true,
 				},
 				view = {
+					side = "right",
 					width = function()
 						return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
 					end,
@@ -1028,7 +1029,7 @@ local plugins = {
 					component_separators = { left = "", right = "" },
 					section_separators = { left = "", right = "" },
 					disabled_filetypes = {
-						statusline = {},
+						statusline = { "NvimTree" },
 						winbar = {},
 					},
 					ignore_focus = {},
