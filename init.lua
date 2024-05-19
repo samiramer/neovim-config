@@ -354,7 +354,8 @@ local plugins = {
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 					map("<leader>lD", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 					map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-					map("<leader>lde", require("telescope.builtin").diagnostics, "Show [D]ocument Diagnostics")
+					map("<leader>lde", function() require("telescope.builtin").diagnostics{bufnr=0} end, "Show [D]ocument Diagnostics")
+					map("<leader>lwe", require("telescope.builtin").diagnostics, "Show [W]orkspace Diagnostics")
 					map(
 						"<leader>lws",
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
