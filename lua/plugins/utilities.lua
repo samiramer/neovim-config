@@ -16,4 +16,13 @@ return {
 			vim.g.sleuth_twig_heuristics = 0
 		end,
 	},
+
+	-- statusline
+	{
+		"echasnovski/mini.statusline",
+		version = false,
+		config = function()
+			require("mini.statusline").setup()
+		end,
+	},
 }
