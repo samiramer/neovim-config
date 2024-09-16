@@ -26,6 +26,18 @@ return {
 				{ desc = "[F]ind [f]iles" },
 			},
 			{
+				"<leader>fF",
+				function()
+					require("telescope.builtin").find_files({
+						hidden = true,
+						follow = true,
+						no_ignore = true,
+						no_ignore_parent = true,
+					})
+				end,
+				{ desc = "[F]ind [f]iles" },
+			},
+			{
 				"<leader>fw",
 				function()
 					require("telescope").extensions.live_grep_args.live_grep_args({ hidden = true })
@@ -42,7 +54,7 @@ return {
 			{
 				"<leader>fg",
 				function()
-					require("telescope.builtin").git_files()
+					require("telescope.builtin").git_status()
 				end,
 				{ desc = "[F]ind [G]it file" },
 			},
