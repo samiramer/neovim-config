@@ -29,4 +29,6 @@ return {
 			require("nightfly")
 		end,
 	},
+	{ "ellisonleao/gruvbox.nvim", priority = 1000, lazy = false, config = true, opts = { contrast = "hard", bold = false } },
+	{ "rebelot/kanagawa.nvim", priority = 1000, lazy = false },
 }
