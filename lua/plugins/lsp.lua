@@ -138,7 +138,7 @@ return {
 				tailwindcss = {
 					capabilities = css_capabilities,
 				},
-				tsserver = {
+				ts_ls = {
 					capabilities = capabilities,
 					init_options = {
 						plugins = {
@@ -213,7 +213,7 @@ return {
 				"phpstan",
 				"php-debug-adapter",
 				"stylelint",
-				"tsserver",
+				"ts_ls",
 			})
 
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
