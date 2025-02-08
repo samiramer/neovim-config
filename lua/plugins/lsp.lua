@@ -213,7 +213,7 @@ return {
 				"phpstan",
 				"php-debug-adapter",
 				"stylelint",
-				"ts_ls",
+				"typescript-language-server",
 			})
 
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
