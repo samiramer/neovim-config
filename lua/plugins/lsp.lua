@@ -16,31 +16,33 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
-					local map = function(keys, func, desc)
-						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+					local map = function(mode, keys, func, desc)
+						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-					map("<leader>lD", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-					map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-					map("<leader>lde", function()
+					map("n", "gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+					map("n", "gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+					map("n", "gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+					map("n", "<leader>lD", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+					map("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+					map("n", "<leader>lde", function()
 						require("telescope.builtin").diagnostics({ bufnr = 0 })
 					end, "Show [D]ocument Diagnostics")
-					map("<leader>lwe", require("telescope.builtin").diagnostics, "Show [W]orkspace Diagnostics")
+					map("n", "<leader>lwe", require("telescope.builtin").diagnostics, "Show [W]orkspace Diagnostics")
 					map(
+						"n",
 						"<leader>lws",
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
 						"[W]orkspace [S]ymbols"
 					)
-					map("<leader>lj", vim.diagnostic.goto_next, "Go to next diagnostic")
-					map("<leader>lk", vim.diagnostic.goto_prev, "Go to previous diagnostic")
-					map("<leader>le", vim.diagnostic.open_float, "G[e]t line diagnostics")
-					map("<leader>lr", vim.lsp.buf.rename, "[R]ename")
-					map("<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
-					map("K", vim.lsp.buf.hover, "Hover Documentation")
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("n", "<leader>lj", vim.diagnostic.goto_next, "Go to next diagnostic")
+					map("n", "<leader>lk", vim.diagnostic.goto_prev, "Go to previous diagnostic")
+					map("n", "<leader>le", vim.diagnostic.open_float, "G[e]t line diagnostics")
+					map("n", "<leader>lr", vim.lsp.buf.rename, "[R]ename")
+					map({"n", "v"}, "<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
+
+					map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
 					-- Create a command `:Format` local to the LSP buffer
 					vim.api.nvim_buf_create_user_command(0, "Format", function(_)
@@ -53,7 +55,7 @@ return {
 						end
 					end, { desc = "Format current buffer with LSP" })
 
-					map("<leader>lf", ":Format<CR>", "LSP Format current buffer")
+					map("n", "<leader>lf", ":Format<CR>", "LSP Format current buffer")
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.server_capabilities.documentHighlightProvider then
