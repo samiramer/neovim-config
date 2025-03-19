@@ -1,4 +1,12 @@
 return {
+	{
+		"phpactor/phpactor",
+		ft = "php",
+		cond = function()
+			return vim.fn.executable("composer") == 1
+		end,
+		build = "composer install --no-dev -o",
+	},
 	{ -- lsp setup
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
