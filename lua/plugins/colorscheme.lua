@@ -41,5 +41,5 @@ return {
 		end,
 	},
 	{ "rebelot/kanagawa.nvim", priority = 1000, lazy = false },
-	{ "EdenEast/nightfox.nvim", priority = 1000, lazy = false },
+	{ "EdenEast/nightfox.nvim", priority = 1500, lazy = false },
 }
