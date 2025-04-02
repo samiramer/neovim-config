@@ -170,12 +170,6 @@ return {
 						["/var/www/html"] = "${workspaceFolder}",
 					},
 				},
-				{
-					type = "php",
-					request = "launch",
-					name = "PHP 8.2: Listen for Xdebug",
-					port = 9082,
-				},
 			}
 		end,
 	},
