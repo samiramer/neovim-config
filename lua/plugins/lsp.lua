@@ -120,9 +120,9 @@ return {
 				},
 				volar = {
 					capabilities = capabilities,
-					-- settings = {
-					-- 	filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-					-- },
+					settings = {
+						filetypes = { "typescript", "javascript", "vue" },
+					},
 				},
 				emmet_language_server = {
 					capabilities = capabilities,
@@ -155,9 +155,11 @@ return {
 						plugins = {
 							{
 								name = "@vue/typescript-plugin",
-								location = os.getenv("HOME")
-										.. "/.nvm/versions/node/v20.13.1/lib/node_modules/@vue/typescript-plugin",
-								languages = { "typescript", "vue" },
+								location = vim.fn.stdpath("data")
+										.. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+								languages = { "vue" },
+								configNamespace = "typescript",
+								enableForWorkspaceTypeScriptVersions = true,
 							},
 						},
 						tsserver = {
