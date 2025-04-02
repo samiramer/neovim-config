@@ -1,5 +1,5 @@
 return {
-	{
+	{ -- phpactor for introspection
 		"phpactor/phpactor",
 		ft = "php",
 		cond = function()
@@ -14,7 +14,6 @@ return {
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			"nvimtools/none-ls.nvim",
 			{ "j-hui/fidget.nvim", opts = { progress = { display = { done_ttl = 1 } } } },
 			{ "folke/neodev.nvim", opts = {} },
@@ -56,9 +55,7 @@ return {
 					-- Create a command `:Format` local to the LSP buffer
 					vim.api.nvim_buf_create_user_command(0, "Format", function(_)
 						vim.lsp.buf.format({ timeout_ms = 5000 })
-						-- vim.lsp.buf.format {
-						--   filter = function(client) return client.name ~= "intelephense" end
-						-- }
+
 						if vim.fn.exists(":EslintFixAll") > 0 then
 							vim.cmd("EslintFixAll")
 						end
@@ -81,9 +78,7 @@ return {
 
 					if client and client.server_capabilities.signatureHelpProvider then
 						vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
-						vim.keymap.set("i", "<c-k>", function()
-							return vim.lsp.buf.signature_help()
-						end, { desc = "Signature help" })
+						vim.keymap.set("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
 					end
 				end,
 			})
@@ -236,9 +231,8 @@ return {
 				"typescript-language-server",
 			})
 
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
 			require("mason-lspconfig").setup({
+				ensure_installed = ensure_installed,
 				handlers = {
 					function(server_name)
 						local server = servers[server_name] or {}
