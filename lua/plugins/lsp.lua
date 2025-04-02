@@ -78,6 +78,13 @@ return {
 							callback = vim.lsp.buf.clear_references,
 						})
 					end
+
+					if client and client.server_capabilities.signatureHelpProvider then
+						vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
+						vim.keymap.set("i", "<c-k>", function()
+							return vim.lsp.buf.signature_help()
+						end, { desc = "Signature help" })
+					end
 				end,
 			})
 
