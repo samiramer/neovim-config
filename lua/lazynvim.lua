@@ -18,10 +18,8 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- import your plugins
-    { import = "plugins" },
+    { import = "features" },
   },
   install = { colorscheme = { "nightfly" } },
-  -- automatically check for plugin updates
   checker = { enabled = false },
 })

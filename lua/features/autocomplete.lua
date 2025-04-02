@@ -1,4 +1,5 @@
 return {
+
 	{ -- autocompletions
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
