@@ -21,6 +21,7 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
+			-- add keymaps once an LSP client gets attached
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -47,7 +48,7 @@ return {
 					map("n", "<leader>lk", vim.diagnostic.goto_prev, "Go to previous diagnostic")
 					map("n", "<leader>le", vim.diagnostic.open_float, "G[e]t line diagnostics")
 					map("n", "<leader>lr", vim.lsp.buf.rename, "[R]ename")
-					map({"n", "v"}, "<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					map({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
 
 					map("n", "gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
