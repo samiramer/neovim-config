@@ -15,6 +15,7 @@ return {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"nvimtools/none-ls.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = { progress = { display = { done_ttl = 1 } } } },
 			{ "folke/neodev.nvim", opts = {} },
 			"hrsh7th/cmp-nvim-lsp",
@@ -108,9 +109,6 @@ return {
 				eslint = {
 					capabilities = capabilities,
 				},
-				eslint_d = {
-					capabilities = capabilities,
-				},
 				intelephense = {
 					capabilities = capabilities,
 					settings = {
@@ -176,6 +174,9 @@ return {
 						"vue",
 					},
 				},
+				twiggy_language_server = {
+					capabilities = capabilities,
+				},
 			}
 
 			require("null-ls").setup({
@@ -219,20 +220,20 @@ return {
 
 			require("mason").setup()
 
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua",
-				"prettier",
-				"phpcs",
-				"php-cs-fixer",
-				"phpstan",
-				"php-debug-adapter",
-				"stylelint",
-				"typescript-language-server",
-			})
+			require("mason-tool-installer").setup {
+				ensure_installed = {
+					"stylua",
+					"prettier",
+					"phpcs",
+					"php-cs-fixer",
+					"phpstan",
+					"php-debug-adapter",
+					"stylelint",
+				}
+			}
 
 			require("mason-lspconfig").setup({
-				ensure_installed = ensure_installed,
+				ensure_installed = vim.tbl_keys(servers or {}),
 				handlers = {
 					function(server_name)
 						local server = servers[server_name] or {}
