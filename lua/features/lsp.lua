@@ -149,6 +149,9 @@ return {
 				tailwindcss = {
 					capabilities = css_capabilities,
 				},
+				stylelint_lsp = {
+					capabilities = capabilities,
+				},
 				ts_ls = {
 					capabilities = capabilities,
 					init_options = {
