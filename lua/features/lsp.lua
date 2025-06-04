@@ -106,6 +106,9 @@ return {
 						},
 					},
 				},
+				clangd = {
+					capabilities = capabilities,
+				},
 				eslint = {
 					capabilities = capabilities,
 				},
