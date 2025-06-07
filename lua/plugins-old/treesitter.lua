@@ -2,16 +2,14 @@ return {
 	{ -- treesitter (syntax highlighting and other nice features)
 		"nvim-treesitter/nvim-treesitter",
 		event = { "BufReadPre", "BufNewFile" },
-		lazy = true,
 		opts = {
 			ensure_installed = {
 				"bash",
 				"blade",
-				"c",
+				"lua",
 				"html",
 				"javascript",
 				"json",
-				"lua",
 				"luadoc",
 				"luap",
 				"markdown",
@@ -42,8 +40,8 @@ return {
 		config = function(_, opts)
 			vim.filetype.add({
 				pattern = {
-					["*.blade.php"] = "blade",
-				},
+					['.*%.blade%.php'] = 'blade'
+				}
 			})
 
 			require("nvim-treesitter.configs").setup(opts)

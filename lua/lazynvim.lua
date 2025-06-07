@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    { import = "features" },
+    { import = "plugins" },
   },
   install = { colorscheme = { "nightfly" } },
   checker = { enabled = false },

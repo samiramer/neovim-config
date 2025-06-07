@@ -1,7 +1,7 @@
 return {
 	{ "tpope/vim-fugitive", cmd = "Git" }, -- super useful Git plugin
 
-	{ -- adds git signs to the gutter and other useful git features
+	{                                     -- adds git signs to the gutter and other useful git features
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		opts = {

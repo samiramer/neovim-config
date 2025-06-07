@@ -152,7 +152,7 @@ return {
 		opts = {},
 		config = function()
 			local dap = require("dap")
-			-- dap.defaults.php.exception_breakpoints = { "Notice", "Warning", "Error", "Exception" }
+			dap.defaults.php.exception_breakpoints = { "Notice", "Warning", "Error", "Exception" }
 
 			dap.adapters.php = {
 				type = "executable",
@@ -174,4 +174,3 @@ return {
 		end,
 	},
 }
-

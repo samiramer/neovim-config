@@ -32,7 +32,7 @@ vim.o.conceallevel = 2
 
 vim.o.showmode = false
 
-vim.o.colorcolumn = "100"
+vim.o.colorcolumn = "80"
 
 vim.opt.inccommand = "split"
 
