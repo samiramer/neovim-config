@@ -1,26 +1,20 @@
 return {
 	{ -- Debug adapter protocol support
 		"mfussenegger/nvim-dap",
+		lazy = true,
 		dependencies = {
 			"theHamsta/nvim-dap-virtual-text",
 			{
 				"nvim-telescope/telescope-dap.nvim",
+				lazy = true,
 				dependencies = { "nvim-telescope/telescope.nvim" },
 				config = function()
 					require("telescope").load_extension("dap")
 				end,
 			},
 			{
-				"jay-babu/mason-nvim-dap.nvim",
-				dependencies = "mason.nvim",
-				cmd = { "DapInstall", "DapUninstall" },
-				opts = {
-					automatic_installation = true,
-					ensure_installed = { "php" },
-				},
-			},
-			{
 				"rcarriga/nvim-dap-ui",
+				lazy = true,
 				dependencies = { "nvim-neotest/nvim-nio" },
 				keys = {
 					{
