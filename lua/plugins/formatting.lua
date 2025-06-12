@@ -20,7 +20,7 @@ return {
 				formatters_by_ft = {
 					c = { "clang-format" },
 					lua = { "stylua" },
-					php = { "php_cs_fixer" },
+					php = { "php_cs_fixer", "pint" },
 					javascript = { "prettier", "eslint_d" },
 					typescript = { "prettier", "eslint_d" },
 					javascriptreact = { "prettier", "eslint_d" },
@@ -32,6 +32,10 @@ return {
 					markdown = { "prettier" },
 				},
 				formatters = {
+					["pint"] = {
+						cwd = util.root_file({ "pint.json" }),
+						require_cwd = true,
+					},
 					["php_cs_fixer"] = {
 						env = { PHP_CS_FIXER_IGNORE_ENV = "true" },
 						cwd = util.root_file({ ".php-cs-fixer.php" }),
