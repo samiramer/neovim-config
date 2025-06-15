@@ -26,6 +26,7 @@ return {
 				"phpcs",
 				"php-cs-fixer",
 				"php-debug-adapter",
+				"phpstan",
 				"pint",
 				"prettier",
 				"stylelint-lsp",
