@@ -7,7 +7,7 @@ return {
 			php = { "phpstan" },
 		}
 
-		vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufEnter" }, {
+		vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
 			callback = function()
 				require("lint").try_lint()
 			end,

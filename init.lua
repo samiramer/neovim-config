@@ -46,6 +46,7 @@ require("paq")({
 
 	-- formatting and linting
 	"stevearc/conform.nvim",
+	"mfussenegger/nvim-lint",
 
 	-- dap
 	"mfussenegger/nvim-dap",
@@ -416,6 +417,16 @@ require("conform").setup({
 vim.keymap.set("n", "<leader>lf", function()
 	require("conform").format({ timeout = 5000 })
 end)
+
+require("lint").linters_by_ft = {
+	php = { "phpstan" },
+}
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
+	callback = function()
+		require("lint").try_lint()
+	end,
+})
 
 -- nvim-tree
 require("nvim-tree").setup({
