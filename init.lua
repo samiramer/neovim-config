@@ -99,6 +99,16 @@ vim.filetype.add({
 	},
 })
 
+-- highlight on yank
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
+})
+
 -- general keymaps
 vim.keymap.set("i", "jk", "<Esc>", { silent = true })
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
@@ -154,13 +164,6 @@ end)
 
 -- git
 require("gitsigns").setup({
-	signs = {
-		add = { text = "+" },
-		change = { text = "~" },
-		delete = { text = "_" },
-		topdelete = { text = "‾" },
-		changedelete = { text = "~" },
-	},
 	signcolumn = true,
 	on_attach = function()
 		local gs = package.loaded.gitsigns
