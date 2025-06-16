@@ -31,6 +31,10 @@ require("paq")({
 	"nvim-telescope/telescope-live-grep-args.nvim",
 	"nvim-telescope/telescope-ui-select.nvim",
 
+	-- git
+	"tpope/vim-fugitive",
+	"lewis6991/gitsigns.nvim",
+
 	-- lsp
 	"neovim/nvim-lspconfig",
 	"mason-org/mason.nvim",
@@ -147,6 +151,36 @@ end)
 vim.keymap.set({ "n" }, "<leader>fc", function()
 	require("telescope.builtin").colorscheme({ enable_preview = true })
 end)
+
+-- git
+require("gitsigns").setup({
+	signs = {
+		add = { text = "+" },
+		change = { text = "~" },
+		delete = { text = "_" },
+		topdelete = { text = "‾" },
+		changedelete = { text = "~" },
+	},
+	signcolumn = true,
+	on_attach = function()
+		local gs = package.loaded.gitsigns
+		vim.keymap.set("n", "<leader>gj", gs.next_hunk, { desc = "Go to next hunk" })
+		vim.keymap.set("n", "<leader>gk", gs.prev_hunk, { desc = "Go to previous hunk" })
+		vim.keymap.set({ "n", "v" }, "<leader>gs", gs.stage_hunk, { desc = "Stage hunk" })
+		vim.keymap.set({ "n", "v" }, "<leader>gh", gs.reset_hunk, { desc = "Reset hunk" })
+		vim.keymap.set("n", "<leader>gb", gs.stage_buffer, { desc = "Stage buffer" })
+		vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage buffer" })
+		vim.keymap.set("n", "<leader>gr", gs.reset_buffer, { desc = "Reset buffer" })
+		vim.keymap.set("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
+		vim.keymap.set("n", "<leader>gl", function()
+			gs.blame_line({ full = true })
+		end, { desc = "Git blame" })
+		vim.keymap.set("n", "<leader>gd", gs.diffthis, { desc = "Diff this" })
+		vim.keymap.set("n", "<leader>gD", function()
+			gs.diffthis("~")
+		end, { desc = "Diff this ~" })
+	end,
+})
 
 -- mason
 require("mason").setup()
@@ -306,7 +340,6 @@ for server, config in pairs(servers) do
 	vim.lsp.enable(server)
 end
 
--- keymaps - lsp
 vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions)
 vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references)
 vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations)
