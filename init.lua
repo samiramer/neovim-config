@@ -23,6 +23,7 @@ require("paq")({
 
 	-- colorscheme
 	"ellisonleao/gruvbox.nvim",
+	{ "catppuccin/nvim", as = "catppuccin" },
 
 	-- telescope
 	"nvim-lua/plenary.nvim",
@@ -124,9 +125,10 @@ vim.keymap.set("n", "<leader>=", ":split<CR>", { noremap = true, silent = true, 
 vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
 
 -- colorscheme
-require("gruvbox").setup({ contrast = "hard", bold = false })
+require("catppuccin").setup()
+-- require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.o.background = "dark"
-vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme catppuccin")
 
 -- telescope
 require("telescope").setup({
