@@ -125,10 +125,10 @@ vim.keymap.set("n", "<leader>=", ":split<CR>", { noremap = true, silent = true, 
 vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
 
 -- colorscheme
-require("catppuccin").setup()
--- require("gruvbox").setup({ contrast = "hard", bold = false })
+-- require("catppuccin").setup()
+require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.o.background = "dark"
-vim.cmd("colorscheme catppuccin")
+vim.cmd("colorscheme gruvbox")
 
 -- telescope
 require("telescope").setup({
@@ -192,6 +192,7 @@ require("gitsigns").setup({
 require("mason").setup()
 require("mason-tool-installer").setup({
 	ensure_installed = {
+		"black",
 		"clangd",
 		"clang-format",
 		"css-lsp",
@@ -207,6 +208,7 @@ require("mason-tool-installer").setup({
 		"phpstan",
 		"pint",
 		"prettier",
+		"pyright",
 		"stylelint-lsp",
 		"stylua",
 		"tailwindcss-language-server",
@@ -241,6 +243,7 @@ local servers = {
 	eslint = {},
 	stylelint_lsp = {},
 	tailwindcss = {},
+	pyright = {},
 	emmet_language_server = {
 		settings = {
 			filetypes = {
@@ -385,6 +388,7 @@ require("conform").setup({
 		html = { "prettier" },
 		json = { "prettier" },
 		markdown = { "prettier" },
+		python = { "black" },
 	},
 	formatters = {
 		["pint"] = {
