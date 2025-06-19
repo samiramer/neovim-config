@@ -58,11 +58,13 @@ require("paq")({
 
 	-- utilities
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	"nvim-treesitter-textobjects",
+	"JoosepAlviste/nvim-ts-context-commentstring",
 	"nvim-tree/nvim-tree.lua",
 	"echasnovski/mini.surround",
 	"christoomey/vim-tmux-navigator",
 	"tpope/vim-sleuth",
-	"tpope/vim-commentary",
+	"numToStr/Comment.nvim",
 	"nvim-lualine/lualine.nvim",
 })
 
@@ -222,6 +224,31 @@ require("mason-tool-installer").setup({
 require("nvim-treesitter.configs").setup({
 	indent = { enable = true },
 	auto_install = true,
+	ensure_installed = {
+		"bash",
+		"blade",
+		"c",
+		"css",
+		"dockerfile",
+		"html",
+		"javascript",
+		"json",
+		"lua",
+		"luadoc",
+		"markdown",
+		"markdown_inline",
+		"php",
+		"python",
+		"query",
+		"toml",
+		"tsx",
+		"twig",
+		"typescript",
+		"vim",
+		"vue",
+		"vimdoc",
+		"yaml",
+	},
 	highlight = {
 		enable = true,
 		disable = function(_, buf)
@@ -247,6 +274,7 @@ local servers = {
 	emmet_language_server = {
 		settings = {
 			filetypes = {
+				"blade",
 				"css",
 				"eruby",
 				"html",
@@ -543,3 +571,12 @@ end)
 vim.keymap.set({ "n" }, "<leader>dA", function()
 	require("dap").set_exception_breakpoints({})
 end)
+
+-- utilities setup
+require("mini.surround").setup()
+require("ts_context_commentstring").setup({
+	enable_autocmd = false,
+})
+require("Comment").setup({
+	pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+})
