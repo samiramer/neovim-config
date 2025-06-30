@@ -58,7 +58,7 @@ require("paq")({
 
 	-- utilities
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-	"nvim-treesitter-textobjects",
+	"nvim-treesitter/nvim-treesitter-textobjects",
 	"JoosepAlviste/nvim-ts-context-commentstring",
 	"nvim-tree/nvim-tree.lua",
 	"echasnovski/mini.surround",
@@ -248,6 +248,34 @@ require("nvim-treesitter.configs").setup({
 		"vue",
 		"vimdoc",
 		"yaml",
+	},
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "<C-space>",
+			node_incremental = "<C-space>",
+			node_decremental = "<bs>",
+		},
+	},
+	textobjects = {
+		select = {
+			enable = true,
+			lookahead = true,
+			keymaps = {
+				["a="] = { query = "@assignment.outer" },
+				["i="] = { query = "@assignment.inner" },
+				["l="] = { query = "@assignment.lhs" },
+				["r="] = { query = "@assignment.rhs" },
+				["aa"] = { query = "@parameter.outer" },
+				["ia"] = { query = "@parameter.inner" },
+				["af"] = { query = "@call.outer" },
+				["if"] = { query = "@call.inner" },
+				["am"] = { query = "@function.outer" },
+				["im"] = { query = "@function.inner" },
+				["ac"] = { query = "@class.outer" },
+				["ic"] = { query = "@class.inner" },
+			},
+		},
 	},
 	highlight = {
 		enable = true,
@@ -573,7 +601,20 @@ vim.keymap.set({ "n" }, "<leader>dA", function()
 end)
 
 -- utilities setup
-require("mini.surround").setup()
+require("mini.surround").setup({
+	mappings = {
+		add = "<leader>sa", -- Add surrounding in Normal and Visual modes
+		delete = "<leader>sd", -- Delete surrounding
+		find = "<leader>sf", -- Find surrounding (to the right)
+		find_left = "<leader>sF", -- Find surrounding (to the left)
+		highlight = "<leader>sh", -- Highlight surrounding
+		replace = "<leader>sr", -- Replace surrounding
+		update_n_lines = "<leader>sn", -- Update `n_lines`
+
+		suffix_last = "l", -- Suffix to search with "prev" method
+		suffix_next = "n", -- Suffix to search with "next" method
+	},
+})
 require("ts_context_commentstring").setup({
 	enable_autocmd = false,
 })
