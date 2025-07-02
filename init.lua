@@ -470,6 +470,7 @@ require("conform").setup({
 				"prettier.config.js",
 				"prettier.config.cjs",
 				"prettier.config.mjs",
+				"prettier.config.ts",
 			}),
 			require_cwd = true,
 		},
