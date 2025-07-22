@@ -25,6 +25,7 @@ require("paq")({
 	"ellisonleao/gruvbox.nvim",
 	{ "catppuccin/nvim", as = "catppuccin" },
 	{ "projekt0n/github-nvim-theme" },
+	"sainnhe/gruvbox-material",
 
 	-- telescope
 	"nvim-lua/plenary.nvim",
