@@ -130,9 +130,11 @@ vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true,
 
 -- colorscheme
 -- require("catppuccin").setup()
-require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.o.background = "dark"
-vim.cmd("colorscheme gruvbox")
+vim.g.gruvbox_material_background = 'hard'
+
+require("gruvbox").setup({ contrast = "hard", bold = false })
+vim.cmd("colorscheme gruvbox-material")
 
 -- telescope
 require("telescope").setup({
