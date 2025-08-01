@@ -131,7 +131,7 @@ vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true,
 -- colorscheme
 -- require("catppuccin").setup()
 vim.o.background = "dark"
-vim.g.gruvbox_material_background = 'hard'
+-- vim.g.gruvbox_material_background = 'hard'
 
 require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.cmd("colorscheme gruvbox-material")
