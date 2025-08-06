@@ -67,7 +67,7 @@ require("paq")({
 	"christoomey/vim-tmux-navigator",
 	"tpope/vim-sleuth",
 	"numToStr/Comment.nvim",
-	"nvim-lualine/lualine.nvim",
+	"echasnovski/mini.statusline",
 })
 
 -- options
@@ -135,6 +135,9 @@ vim.o.background = "dark"
 
 require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.cmd("colorscheme gruvbox-material")
+
+-- statusline
+require('mini.statusline').setup()
 
 -- telescope
 require("telescope").setup({
