@@ -44,8 +44,11 @@ require("paq")({
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	"mason-org/mason-lspconfig.nvim",
 
+	-- lsp breadcrumbs
+	"Bekaboo/dropbar.nvim",
+
 	-- completions
-	{ "saghen/blink.cmp", branch = "v1.3.1" },
+	{ "saghen/blink.cmp", branch = "v1.6.0" },
 
 	-- formatting and linting
 	"stevearc/conform.nvim",
@@ -132,17 +135,17 @@ vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true,
 -- require("catppuccin").setup()
 vim.o.background = "dark"
 -- vim.g.gruvbox_material_background = 'hard'
+-- require("gruvbox").setup({ contrast = "hard", bold = false })
 
-require("gruvbox").setup({ contrast = "hard", bold = false })
 vim.cmd("colorscheme gruvbox-material")
 
 -- statusline
-require('mini.statusline').setup()
+require("mini.statusline").setup()
 
 -- telescope
 require("telescope").setup({
 	defaults = {
-		layout_strategy = "vertical",
+		layout_strategy = "horizontal",
 	},
 	extensions = {
 		["ui-select"] = {
@@ -197,35 +200,12 @@ require("gitsigns").setup({
 	end,
 })
 
--- mason
-require("mason").setup()
-require("mason-tool-installer").setup({
-	ensure_installed = {
-		"black",
-		"clangd",
-		"clang-format",
-		"css-lsp",
-		"emmet-language-server",
-		"eslint-lsp",
-		"eslint_d",
-		"html-lsp",
-		"intelephense",
-		"lua-language-server",
-		"phpcs",
-		"php-cs-fixer",
-		"php-debug-adapter",
-		"phpstan",
-		"pint",
-		"prettier",
-		"pyright",
-		"stylelint-lsp",
-		"stylua",
-		"tailwindcss-language-server",
-		"typescript-language-server",
-		"vue-language-server",
-	},
-	run_on_start = true,
-})
+-- breadcrumbs
+require("dropbar").setup()
+local dropbar_api = require('dropbar.api')
+vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
+vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
 
 -- treesitter
 require("nvim-treesitter.configs").setup({
@@ -296,6 +276,35 @@ require("nvim-treesitter.configs").setup({
 			return false
 		end,
 	},
+})
+
+-- mason
+require("mason").setup()
+require("mason-tool-installer").setup({
+	ensure_installed = {
+		"black",
+		"clangd",
+		"clang-format",
+		"css-lsp",
+		"emmet-language-server",
+		"eslint-lsp",
+		"html-lsp",
+		"intelephense",
+		"lua-language-server",
+		"phpcs",
+		"php-cs-fixer",
+		"php-debug-adapter",
+		"phpstan",
+		"pint",
+		"prettier",
+		"pyright",
+		"stylelint-lsp",
+		"stylua",
+		"tailwindcss-language-server",
+		"typescript-language-server",
+		"vue-language-server",
+	},
+	run_on_start = true,
 })
 
 -- lsp
@@ -412,41 +421,46 @@ for server, config in pairs(servers) do
 	vim.lsp.enable(server)
 end
 
-vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions)
-vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references)
-vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations)
-vim.keymap.set("n", "<leader>lD", require("telescope.builtin").lsp_type_definitions)
-vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols)
-vim.keymap.set("n", "<leader>lde", function()
-	require("telescope.builtin").diagnostics({ bufnr = 0 })
-end)
-vim.keymap.set("n", "<leader>lwe", require("telescope.builtin").diagnostics)
-vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols)
-vim.keymap.set("n", "<leader>lj", function()
-	vim.diagnostic.jump({ count = 1, float = true })
-end)
-vim.keymap.set("n", "<leader>lk", function()
-	vim.diagnostic.jump({ count = -1, float = true })
-end)
-vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float)
-vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
-vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
-vim.keymap.set("n", "K", vim.lsp.buf.hover)
-vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions)
+		vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references)
+		vim.keymap.set("n", "gI", require("telescope.builtin").lsp_implementations)
+		vim.keymap.set("n", "<leader>lD", require("telescope.builtin").lsp_type_definitions)
+		vim.keymap.set("n", "<leader>lds", require("telescope.builtin").lsp_document_symbols)
+		vim.keymap.set("n", "<leader>lde", function()
+			require("telescope.builtin").diagnostics({ bufnr = 0 })
+		end)
+		vim.keymap.set("n", "<leader>lwe", require("telescope.builtin").diagnostics)
+		vim.keymap.set("n", "<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols)
+		vim.keymap.set("n", "<leader>lj", function()
+			vim.diagnostic.jump({ count = 1, float = true })
+		end)
+		vim.keymap.set("n", "<leader>lk", function()
+			vim.diagnostic.jump({ count = -1, float = true })
+		end)
+		vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float)
+		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
+		vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action)
+		vim.keymap.set("n", "K", vim.lsp.buf.hover)
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
+	end,
+})
 
 -- formatting
 local util = require("conform.util")
 require("conform").setup({
-	log_level = vim.log.levels.DEBUG,
+	-- log_level = vim.log.levels.DEBUG,
+	lsp_format = "last",
 	formatters_by_ft = {
 		c = { "clang-format" },
 		lua = { "stylua" },
 		php = { "php_cs_fixer", "pint" },
-		javascript = { "prettier", "eslint_d" },
-		typescript = { "prettier", "eslint_d" },
-		javascriptreact = { "prettier", "eslint_d" },
-		typescriptreact = { "prettier", "eslint_d" },
-		vue = { "prettier", "eslint_d" },
+		javascript = { "prettier" },
+		typescript = { "prettier" },
+		javascriptreact = { "prettier" },
+		typescriptreact = { "prettier" },
+		vue = { "prettier" },
 		css = { "prettier" },
 		html = { "prettier" },
 		json = { "prettier" },
@@ -492,7 +506,7 @@ require("lint").linters_by_ft = {
 	php = { "phpstan" },
 }
 
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
 	callback = function()
 		require("lint").try_lint()
 	end,
@@ -551,9 +565,6 @@ vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeFindFileToggle<cr>")
 require("blink.cmp").setup({
 	completion = { documentation = { auto_show = true } },
 	fuzzy = { implementation = "prefer_rust_with_warning" },
-	sources = {
-		default = { "lsp", "buffer", "snippets", "path", "cmdline" },
-	},
 })
 
 -- dap
