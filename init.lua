@@ -26,6 +26,8 @@ require("paq")({
 	{ "catppuccin/nvim", as = "catppuccin" },
 	{ "projekt0n/github-nvim-theme" },
 	"sainnhe/gruvbox-material",
+	"rebelot/kanagawa.nvim",
+	"bluz71/vim-nightfly-colors",
 
 	-- telescope
 	"nvim-lua/plenary.nvim",
@@ -101,6 +103,7 @@ vim.o.inccommand = "split"
 vim.o.cursorline = true
 vim.wo.number = true
 vim.wo.relativenumber = true
+vim.o.winborder = "single"
 
 vim.filetype.add({
 	pattern = {
@@ -132,12 +135,20 @@ vim.keymap.set("n", "<leader>=", ":split<CR>", { noremap = true, silent = true, 
 vim.keymap.set("n", "<leader>-", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
 
 -- colorscheme
--- require("catppuccin").setup()
+require("gruvbox").setup({ contrast = "hard", bold = false })
+require("catppuccin").setup()
+
+-- vim.o.background = "light"
 vim.o.background = "dark"
--- vim.g.gruvbox_material_background = 'hard'
--- require("gruvbox").setup({ contrast = "hard", bold = false })
+vim.g.nightflyNormalFloat = true
+vim.g.gruvbox_material_background = 'hard'
+
 
 vim.cmd("colorscheme gruvbox-material")
+-- vim.cmd("colorscheme kanagawa")
+-- vim.cmd("colorscheme github_light_tritanopia")
+-- vim.cmd("colorscheme nightfly")
+-- vim.cmd("colorscheme gruvbox")
 
 -- statusline
 require("mini.statusline").setup()
@@ -502,15 +513,15 @@ vim.keymap.set("n", "<leader>lf", function()
 	require("conform").format({ timeout = 5000 })
 end)
 
-require("lint").linters_by_ft = {
-	php = { "phpstan" },
-}
-
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
-	callback = function()
-		require("lint").try_lint()
-	end,
-})
+-- require("lint").linters_by_ft = {
+-- 	php = { "phpstan" },
+-- }
+--
+-- vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+-- 	callback = function()
+-- 		require("lint").try_lint()
+-- 	end,
+-- })
 
 -- nvim-tree
 require("nvim-tree").setup({
