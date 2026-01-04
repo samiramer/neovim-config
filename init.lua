@@ -11,11 +11,12 @@ vim.pack.add({
 	"https://github.com/lewis6991/gitsigns.nvim",
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
+	"https://github.com/nvim-mini/mini.icons",
 })
 
 vim.cmd("colorscheme kanagawa")
 
-require("nvim-treesitter").setup()
+require("mini.icons").setup()
 require("gitsigns").setup()
 require("mason").setup()
 require("mason-tool-installer").setup({
@@ -80,6 +81,31 @@ require("snacks").setup({
 	},
 })
 
+-- treesitter setup
+local TS = require("nvim-treesitter")
+TS.setup()
+
+local ts_installed = TS.get_installed("parsers")
+local ts_required = {
+	"lua",
+	"php",
+	"twig",
+	"vue",
+	"tsx",
+	"javascript",
+	"python",
+	"json",
+	"toml",
+}
+
+local ts_install = vim.tbl_filter(function(lang)
+	return not vim.tbl_contains(ts_installed, lang)
+end, ts_required)
+
+for _, filetype in ipairs(ts_install) do
+	TS.install(filetype)
+end
+
 -- options
 vim.o.laststatus = 3
 vim.g.mapleader = " "
@@ -109,6 +135,8 @@ vim.o.cursorline = true
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.o.winborder = "single"
+vim.opt.clipboard = "unnamedplus"
+vim.o.background = "dark"
 
 -- highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -194,27 +222,22 @@ vim.api.nvim_create_autocmd("LspProgress", {
 	end,
 })
 
--- auto load treesitter parser
+-- Start treesitter
 vim.api.nvim_create_autocmd("FileType", {
-	callback = function(args)
-		local blacklist = vim.regex([[^snacks_\|^blink]])
+	callback = function(ev)
+		local lang = vim.treesitter.language.get_lang(ev.match)
 
-		local ft = vim.bo[args.buf].filetype
-    if blacklist:match_str(ft) then return end
-
-		local lang = vim.treesitter.language.get_lang(ft) or ft
-		if blacklist:match_str(lang) then return end
-
-		-- install parser if available
-		local ok = pcall(vim.treesitter.language.inspect, lang)
-		if not ok then
-			require("nvim-treesitter").install({ lang })
+		if lang == nil then
+			return
 		end
 
-    -- start treesitter for buffer
-    local start_ok, err = pcall(vim.treesitter.start)
-    if not start_ok then
-      vim.notify("Treesitter failed: " .. err, vim.log.levels.DEBUG)
-    end
+		vim.treesitter.language.add(lang)
+		if vim.treesitter.query.get(lang, "highlights") then
+			vim.treesitter.start()
+		end
+		if vim.treesitter.query.get(lang, "indents") then
+			vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+		end
 	end,
 })
+
