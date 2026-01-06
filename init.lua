@@ -4,7 +4,6 @@ vim.pack.add({
 	"https://github.com/mason-org/mason-lspconfig.nvim",
 	"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
 	"https://github.com/christoomey/vim-tmux-navigator",
-	"https://github.com/rebelot/kanagawa.nvim",
 	"https://github.com/folke/snacks.nvim",
 	{ src = "https://github.com/saghen/blink.cmp", version = "v1.7.0" },
 	"https://github.com/stevearc/conform.nvim",
@@ -12,9 +11,16 @@ vim.pack.add({
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/nvim-mini/mini.icons",
+	"https://github.com/mfussenegger/nvim-dap",
+	"https://github.com/theHamsta/nvim-dap-virtual-text",
+	"https://github.com/rcarriga/nvim-dap-ui",
+	"https://github.com/nvim-neotest/nvim-nio",
 })
 
-vim.cmd("colorscheme kanagawa")
+vim.o.background = "dark"
+vim.cmd("colorscheme retrobox")
+-- vim.o.background = "light"
+-- vim.cmd("colorscheme lunaperche")
 
 require("mini.icons").setup()
 require("gitsigns").setup()
@@ -29,6 +35,7 @@ require("mason-tool-installer").setup({
 		"php-cs-fixer",
 		"typescript-language-server",
 		"vue-language-server",
+    "php-debug-adapter",
 	},
 })
 
@@ -136,7 +143,6 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.o.winborder = "single"
 vim.opt.clipboard = "unnamedplus"
-vim.o.background = "dark"
 
 -- highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
@@ -241,3 +247,59 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+local dap = require("dap")
+dap.adapters.php = {
+	type = "executable",
+	command = "php-debug-adapter",
+}
+
+dap.configurations.php = {
+	{
+		type = "php",
+		request = "launch",
+		name = "#PHP 84: Listen for Xdebug",
+		hostname = "localhost",
+		port = 9004,
+	},
+	{
+		type = "php",
+		request = "launch",
+		name = "DDEV PHP: Listen for Xdebug",
+		hostname = "localhost",
+		port = 9003,
+		pathMappings = {
+			["/var/www/html"] = "${workspaceFolder}",
+		},
+	},
+}
+
+local dapui = require("dapui")
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+	dapui.open({})
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+	dapui.close({})
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+	dapui.close({})
+end
+
+vim.keymap.set({ "n" }, "<leader>du", require("dapui").toggle)
+vim.keymap.set({ "n" }, "<leader>de", require("dapui").eval)
+vim.keymap.set({ "n" }, "<leader>db", require("dap").toggle_breakpoint)
+vim.keymap.set({ "n" }, "<leader>dc", require("dap").continue)
+vim.keymap.set({ "n" }, "<leader>dC", require("dap").clear_breakpoints)
+vim.keymap.set({ "n" }, "<leader>do", require("dap").step_over)
+vim.keymap.set({ "n" }, "<leader>dO", require("dap").step_out)
+vim.keymap.set({ "n" }, "<leader>di", require("dap").step_into)
+vim.keymap.set({ "n" }, "<leader>dt", require("dap").terminate)
+vim.keymap.set({ "n" }, "<leader>dR", require("dap").restart)
+vim.keymap.set({ "n" }, "<leader>dR", require("dap.repl").toggle)
+vim.keymap.set({ "n" }, "<leader>dh", require("dap.ui.widgets").hover)
+vim.keymap.set({ "n" }, "<leader>da", function()
+	require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" })
+end)
+vim.keymap.set({ "n" }, "<leader>dA", function()
+	require("dap").set_exception_breakpoints({})
+end)
