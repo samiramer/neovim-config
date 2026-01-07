@@ -15,11 +15,13 @@ vim.pack.add({
 	"https://github.com/theHamsta/nvim-dap-virtual-text",
 	"https://github.com/rcarriga/nvim-dap-ui",
 	"https://github.com/nvim-neotest/nvim-nio",
+	"https://github.com/rebelot/kanagawa.nvim",
 })
 
 vim.o.background = "dark"
-vim.cmd("colorscheme retrobox")
 -- vim.o.background = "light"
+vim.cmd("colorscheme kanagawa")
+-- vim.cmd("colorscheme retrobox")
 -- vim.cmd("colorscheme lunaperche")
 
 require("mini.icons").setup()
