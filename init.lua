@@ -35,9 +35,10 @@ require("mason-tool-installer").setup({
 		"stylua",
 		"intelephense",
 		"php-cs-fixer",
+		"tailwindcss-language-server",
 		"typescript-language-server",
 		"vue-language-server",
-    "php-debug-adapter",
+		"php-debug-adapter",
 	},
 })
 
