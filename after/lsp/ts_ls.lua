@@ -9,6 +9,22 @@ return {
 				configNamespace = "typescript",
 			},
 		},
+		preferences = {
+			importModuleSpecifierPreference = "non-relative",
+			importModuleSpecifierEnding = "minimal",
+		},
 	},
 	filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+	settings = {
+		typescript = {
+			preferences = {
+				importModuleSpecifierPreference = "non-relative",
+			},
+		},
+		javascript = {
+			preferences = {
+				importModuleSpecifierPreference = "non-relative",
+			},
+		},
+	},
 }
