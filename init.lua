@@ -25,7 +25,51 @@ vim.cmd("colorscheme kanagawa")
 -- vim.cmd("colorscheme lunaperche")
 
 require("mini.icons").setup()
-require("gitsigns").setup()
+require("gitsigns").setup({
+  on_attach = function(bufnr)
+    local gitsigns = require('gitsigns')
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', '<leader>gj', function()
+      if vim.wo.diff then
+        vim.cmd.normal({'<leader>gj', bang = true})
+      else
+        gitsigns.nav_hunk('next')
+      end
+    end)
+
+    map('n', '<leader>gk', function()
+      if vim.wo.diff then
+        vim.cmd.normal({'<leader>gk', bang = true})
+      else
+        gitsigns.nav_hunk('prev')
+      end
+    end)
+
+    -- Actions
+    map('n', '<leader>gs', gitsigns.stage_hunk)
+    map('n', '<leader>gh', gitsigns.reset_hunk)
+
+    map('v', '<leader>gs', function()
+      gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+    end)
+
+    map('v', '<leader>gh', function()
+      gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+    end)
+
+    map('n', '<leader>gS', gitsigns.stage_buffer)
+    map('n', '<leader>gr', gitsigns.reset_buffer)
+    map('n', '<leader>gp', gitsigns.preview_hunk)
+    map('n', '<leader>gi', gitsigns.preview_hunk_inline)
+  end
+})
 require("mason").setup()
 require("mason-tool-installer").setup({
 	ensure_installed = {
