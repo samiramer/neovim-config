@@ -1,3 +1,5 @@
+require('vim._core.ui2').enable()
+
 vim.pack.add({
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/projekt0n/github-nvim-theme",
