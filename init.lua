@@ -3,6 +3,7 @@ require('vim._core.ui2').enable()
 vim.pack.add({
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/projekt0n/github-nvim-theme",
+	"https://github.com/rebelot/kanagawa.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
 	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/christoomey/vim-tmux-navigator",
@@ -11,6 +12,7 @@ vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/conform.nvim",
 	"https://github.com/mfussenegger/nvim-lint",
+  "https://github.com/mason-org/mason.nvim",
 	{ src = "https://github.com/saghen/blink.cmp", version = vim.version.range("^1") },
 })
 
@@ -42,6 +44,8 @@ vim.o.cursorline = true
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.o.winborder = "single"
+
+require("mason").setup()
 
 require("mini.icons").setup({ style = "ascii" })
 
@@ -104,7 +108,8 @@ require("gitsigns").setup({
 	end,
 })
 
-vim.cmd("colorscheme github_dark_dimmed")
+-- vim.cmd("colorscheme github_dark_dimmed")
+vim.cmd("colorscheme kanagawa-wave")
 
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {

@@ -3,7 +3,7 @@ return {
 		plugins = {
 			{
 				name = "@vue/typescript-plugin",
-				location = string.gsub(vim.fn.system("npm root -g"), "%s+", "") .. "/@vue/language-server",
+        location = vim.fn.stdpath('data') .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
 				languages = { "vue" },
 				configNamespace = "typescript",
 			},
